@@ -2,27 +2,23 @@
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 
+#include "Game.h"
+
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    sf::CircleShape c2(50.f);
-    shape.setFillColor(sf::Color::Green);
+	// Init Game Engine
+	Game game;
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+	//Game Loop
+	while (game.running())
+	{
+		// Update
+		game.update();
 
-        window.clear();
-        window.draw(shape);
-        window.draw(c2);
-        window.display();
-    }
+		// Render
+		game.render();
+	}
 
-    return 0;
+
+	return 0;
 }
