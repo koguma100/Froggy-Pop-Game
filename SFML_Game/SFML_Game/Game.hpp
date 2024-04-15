@@ -1,14 +1,4 @@
-#pragma once
-
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/System.hpp>
-
-
-using std::cout;
-using std::cin;
-using std::endl;
+#include "Balloon.hpp"
 
 // Class that acts as a game engine: Wrapper Class
 class Game
@@ -66,11 +56,18 @@ public:
 
 			Renders the game objects
 		*/
+		red.moveBalloon();
+		blue.moveBalloon();
+		green.moveBalloon();
 
 		window->clear(); // clears the screen
 
 		// Draw Game // 
 		window->draw(enemy); 
+
+		window->draw(red);
+		window->draw(blue);
+		window->draw(green);
 
 		window->display(); // updates the new frame 
 	}
@@ -84,6 +81,9 @@ private:
 
 	// Game Objects
 	sf::RectangleShape enemy;
+	Balloon red,
+			blue,
+			green;
 
 	// private functions
 	void initVariables()
@@ -101,6 +101,10 @@ private:
 	}
 	void initEnemies() // sets the size of the square
 	{
+		red = Balloon(1, 20, Vector2f(100, 100));
+		blue = Balloon(2, 20, Vector2f(100, 100));
+		green = Balloon(3, 20, Vector2f(100, 100));
+
 		enemy.setPosition(350.f, 225.f);
 		enemy.setSize(sf::Vector2f(100.f, 100.f));
 		//enemy.setScale(sf::Vector2f(.5f, .5f));

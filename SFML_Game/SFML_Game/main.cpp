@@ -2,7 +2,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 
-#include "Game.h"
+#include "Game.hpp"
 
 int main()
 {
