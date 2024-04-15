@@ -110,13 +110,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SFML_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\William\OneDrive\Desktop\College Work\CS 122\SFMLtest\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\thold\OneDrive\Desktop\Cpts 122\SFML Will\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);sfml-graphics-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;sfml-audio-s-d.lib;opengl32.lib;freetype.lib;winmm.lib;gdi32.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\William\OneDrive\Desktop\College Work\CS 122\SFMLtest\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\thold\OneDrive\Desktop\Cpts 122\SFML Will\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>SMFL_STATIC;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\William\OneDrive\Desktop\College Work\CS 122\SFMLtest\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\thold\OneDrive\Desktop\Cpts 122\SFML Will\SFML-2.6.1-windows-vc17-64-bit\SFML-2.6.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
