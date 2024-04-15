@@ -9,7 +9,8 @@ public:
 	{
 		initVariables();
 		initWindow();
-		initEnemies();
+		initBackground();
+		initBalloons();
 	}
 	~Game()
 	{
@@ -63,7 +64,7 @@ public:
 		window->clear(); // clears the screen
 
 		// Draw Game // 
-		window->draw(enemy); 
+		window->draw(background);
 
 		window->draw(red);
 		window->draw(blue);
@@ -80,10 +81,13 @@ private:
 	sf::Event ev;
 
 	// Game Objects
-	sf::RectangleShape enemy;
 	Balloon red,
 			blue,
 			green;
+
+	// Map
+	sf::Texture backgroundTexture;
+	sf::Sprite background;
 
 	// private functions
 	void initVariables()
@@ -99,17 +103,20 @@ private:
 
 		window->setFramerateLimit(144);
 	}
-	void initEnemies() // sets the size of the square
+	void initBackground()
+	{
+		if (!backgroundTexture.loadFromFile("Textures/MonkeyMeadow.png"))
+		{
+			cout << "Image File not found" << endl;
+		}
+
+		background.setTexture(backgroundTexture);
+	}
+	void initBalloons()
 	{
 		red = Balloon(1, 20, Vector2f(100, 100));
 		blue = Balloon(2, 20, Vector2f(100, 100));
 		green = Balloon(3, 20, Vector2f(100, 100));
-
-		enemy.setPosition(350.f, 225.f);
-		enemy.setSize(sf::Vector2f(100.f, 100.f));
-		//enemy.setScale(sf::Vector2f(.5f, .5f));
-		enemy.setFillColor(sf::Color::Cyan);
-		enemy.setOutlineColor(sf::Color::Green);
-		enemy.setOutlineThickness(1.f);
 	}
+
 };
