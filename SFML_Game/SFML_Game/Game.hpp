@@ -1,4 +1,5 @@
 #include "Balloon.hpp"
+#include "Tower.hpp"
 
 // Class that acts as a game engine: Wrapper Class
 class Game
@@ -11,6 +12,7 @@ public:
 		initWindow();
 		initBackground();
 		initBalloons();
+		initTowers();
 	}
 	~Game()
 	{
@@ -21,6 +23,18 @@ public:
 	const bool running() const
 	{
 		return window->isOpen();
+	}
+
+	void balloonMovement() // updates all the balloons movements
+	{
+		red.moveBalloon();
+		blue.moveBalloon();
+		green.moveBalloon();
+	}
+
+	void moveTower() // links the tower with the current mouse position
+	{
+		frogs[0].setPosition(sf::Mouse::getPosition(*window).x - 25.f, sf::Mouse::getPosition(*window).y - 25.f);
 	}
 
 	// Other Functions
@@ -35,9 +49,30 @@ public:
 				break;
 
 			case sf::Event::KeyPressed: // tells the program that the user pressed the escape key
-				if (ev.key.code == sf::Keyboard::Escape)
+				if (ev.key.code == sf::Keyboard::Escape) // closing window
 				{
 					window->close();
+				}
+
+
+				if (ev.key.code == sf::Keyboard::O) // changing control
+				{
+					if (control == ON)
+					{
+						control = OFF;
+					}
+					else
+					{
+						control = ON;
+					}
+				}
+
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
+				{
+					Tower copyFrog = frogs[0];
+					frogs.push_back(copyFrog);
 				}
 				break;
 			}
@@ -47,6 +82,9 @@ public:
 	{
 		pollEvents();
 
+		balloonMovement();
+		if (control == ON)
+		moveTower();
 	}
 	void render() // graphics
 	{
@@ -57,9 +95,6 @@ public:
 
 			Renders the game objects
 		*/
-		red.moveBalloon();
-		blue.moveBalloon();
-		green.moveBalloon();
 
 		window->clear(); // clears the screen
 
@@ -69,7 +104,14 @@ public:
 		window->draw(red);
 		window->draw(blue);
 		window->draw(green);
+		if (control == ON)
+		window->draw(frogs[0]);
 
+		for (int x = 0; x < frogs.size() - 1; ++x)
+		{
+			window->draw(frogs[x + 1]);
+		}
+	
 		window->display(); // updates the new frame 
 	}
 
@@ -85,6 +127,10 @@ private:
 			blue,
 			green;
 
+	std::vector<Tower> frogs;
+
+	control control = ON;
+
 	// Map
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
@@ -99,7 +145,7 @@ private:
 		videoMode.height = 525;
 		videoMode.width = 825;
 
-		window = new sf::RenderWindow(videoMode, "My First Game");
+		window = new sf::RenderWindow(videoMode, "Project F");
 
 		window->setFramerateLimit(144);
 	}
@@ -117,6 +163,11 @@ private:
 		red = Balloon(1, 20, Vector2f(100, 100));
 		blue = Balloon(2, 20, Vector2f(100, 100));
 		green = Balloon(3, 20, Vector2f(100, 100));
+	}
+	void initTowers()
+	{
+		Tower frog = Tower(sf::Color::Black, 3, 1, 1);
+		frogs.push_back(frog);
 	}
 
 };
