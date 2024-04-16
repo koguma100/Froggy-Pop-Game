@@ -1,6 +1,5 @@
-#include "Balloon.hpp"
 #include "Tower.hpp"
-#include "Button.hpp"
+
 
 // Class that acts as a game engine: Wrapper Class
 class Game
@@ -13,7 +12,7 @@ public:
 		initWindow();
 		initBackground();
 		initBalloons();
-		initTowers();
+		initCheckpoints();
 	}
 	~Game()
 	{
@@ -25,15 +24,13 @@ public:
 	{
 		return window->isOpen();
 	}
-
-	void balloonMovement() // updates all the balloons movements
+	
+	void balloonMovement() // moves all the balloons 
 	{
-		red.moveBalloon();
-		blue.moveBalloon();
-		green.moveBalloon();
+		red.moveBalloon(checkpoints);
+		blue.moveBalloon(checkpoints);
+		green.moveBalloon(checkpoints);
 	}
-
-
 
 	// Other Functions
 	void pollEvents() // What happens in the game
@@ -97,23 +94,25 @@ public:
 
 		// Draw Game // 
 		window->draw(background);
+	
 
 		// draw balloons
+		for (int i = 0; i < checkpoints.size(); ++i)
+		{
+			window->draw(checkpoints[i]);
+		}
 		window->draw(red);
 		window->draw(blue);
 		window->draw(green);
 
 		// draw towers
 		if (control == ON)
-		window->draw(frogs[0]);
+			window->draw(frogs[0]);
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
 			window->draw(frogs[x + 1]);
 		}
 
-		// draw menu
-		window->draw(but1);
-	
 		window->display(); // updates the new frame 
 	}
 
@@ -125,17 +124,16 @@ private:
 	sf::Event ev;
 
 	// Game Objects
-	// Balloons
 	Balloon red,
 			blue,
 			green;
 
+	// Checkpoints
+	vector<Checkpoint> checkpoints;
+
 	// Towers
 	std::vector<Tower> frogs;
 	control control = ON;
-
-	// Menus
-	Button but1;
 
 	// Map
 	sf::Texture backgroundTexture;
@@ -148,13 +146,14 @@ private:
 	}
 	void initWindow()
 	{
-		videoMode.height = 525;
-		videoMode.width = 825;
+		videoMode.height = 650;
+		videoMode.width = 800;
 
-		window = new sf::RenderWindow(videoMode, "Project F");
+		window = new sf::RenderWindow(videoMode, "My First Game");
 
 		window->setFramerateLimit(144);
 	}
+
 	void initBackground()
 	{
 		if (!backgroundTexture.loadFromFile("Textures/MonkeyMeadow.png"))
@@ -166,14 +165,29 @@ private:
 	}
 	void initBalloons()
 	{
-		red = Balloon(1, 20, Vector2f(100, 100));
-		blue = Balloon(2, 20, Vector2f(100, 100));
-		green = Balloon(3, 20, Vector2f(100, 100));
+		red = Balloon(1, 15, Vector2f(0, 210));
+		blue = Balloon(2, 15, Vector2f(0, 210));
+		green = Balloon(3, 15, Vector2f(0, 210));
+	}
+
+	void initCheckpoints()
+	{
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(430, 200)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(400, 50)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(220, 80)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(240, 445)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(90, 410)));
+
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(130, 260)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(540, 300)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(500, 140)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(640, 170)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
 	}
 	void initTowers()
 	{
 		Tower frog = Tower(sf::Color::Black, 3, 1, 1);
 		frogs.push_back(frog);
 	}
-
 };
