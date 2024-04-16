@@ -46,10 +46,19 @@ public:
 			}
 		}
 	}
+
+	void balloonMovement() // moves all the balloons 
+	{
+		red.moveBalloon(checkpoints);
+		blue.moveBalloon(checkpoints);
+		green.moveBalloon(checkpoints);
+	}
+
 	void update() // what actually happens in the game
 	{
 		pollEvents();
 
+		balloonMovement();
 	}
 	void render() // graphics
 	{
@@ -60,9 +69,6 @@ public:
 
 			Renders the game objects
 		*/
-		red.moveBalloon(checkpoints);
-		blue.moveBalloon(checkpoints);
-		green.moveBalloon(checkpoints);
 
 		window->clear(); // clears the screen
 
