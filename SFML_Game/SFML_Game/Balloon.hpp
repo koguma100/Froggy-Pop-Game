@@ -1,19 +1,4 @@
-#pragma once
-
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/System.hpp>
-
-using std::cout;
-using std::cin;
-using std::endl;
-using sf::Vector2f;
-
-enum direction
-{
-	UP = 1, RIGHT = 2, DOWN = 3, LEFT = 4
-};
+#include "Checkpoint.hpp"
 
 class Balloon : public sf::CircleShape
 {
@@ -51,7 +36,8 @@ public:
 
 	void setType(int type);
 
-	void moveBalloon();
+	void moveBalloon(const vector<Checkpoint>& checkpoints);
+
 
 private:
 	int type;

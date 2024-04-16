@@ -18,8 +18,16 @@ void Balloon::setType(int type)
     this->type = type;
 }
 
-void Balloon::moveBalloon()
+void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints)
 {
+    for (int i = 0; i < checkpoints.size(); ++i)
+    {
+        if (getGlobalBounds().intersects(checkpoints[i].getGlobalBounds()))
+        {
+            direct = checkpoints[i].getDirection();
+        }
+    }
+
     if (direct == UP)
     {
         this->move(0, speed * -1);
