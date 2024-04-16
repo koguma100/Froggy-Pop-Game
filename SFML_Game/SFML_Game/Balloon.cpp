@@ -5,6 +5,7 @@ Balloon::Balloon(const Balloon& copy)
     this->type = copy.type;
     this->color = copy.color;
     this->speed = copy.speed;
+    this->direct = copy.direct;
     this->setPosition(copy.getPosition());
 }
 
