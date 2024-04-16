@@ -24,6 +24,13 @@ public:
 	{
 		return window->isOpen();
 	}
+	
+	void balloonMovement() // moves all the balloons 
+	{
+		red.moveBalloon(checkpoints);
+		blue.moveBalloon(checkpoints);
+		green.moveBalloon(checkpoints);
+	}
 
 	// Other Functions
 	void pollEvents() // What happens in the game
@@ -37,27 +44,41 @@ public:
 				break;
 
 			case sf::Event::KeyPressed: // tells the program that the user pressed the escape key
-				if (ev.key.code == sf::Keyboard::Escape)
+				if (ev.key.code == sf::Keyboard::Escape) // closing window
 				{
 					window->close();
+				}
+
+
+				if (ev.key.code == sf::Keyboard::O) // changing control
+				{
+					if (control == ON)
+					{
+						control = OFF;
+					}
+					else
+					{
+						control = ON;
+					}
+				}
+
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
+				{
+					Tower copyFrog = frogs[0];
+					frogs.push_back(copyFrog);
 				}
 				break;
 			}
 		}
 	}
-
-	void balloonMovement() // moves all the balloons 
-	{
-		red.moveBalloon(checkpoints);
-		blue.moveBalloon(checkpoints);
-		green.moveBalloon(checkpoints);
-	}
-
 	void update() // what actually happens in the game
 	{
 		pollEvents();
 
 		balloonMovement();
+		frogs[0].moveTower(window, control);
 	}
 	void render() // graphics
 	{
