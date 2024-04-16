@@ -1,5 +1,5 @@
-
 #include "Balloon.hpp"
+#include "Tower.hpp"
 
 
 // Class that acts as a game engine: Wrapper Class
@@ -98,7 +98,12 @@ private:
 			blue,
 			green;
 
+	// Checkpoints
 	vector<Checkpoint> checkpoints;
+
+	// Towers
+	std::vector<Tower> frogs;
+	control control = ON;
 
 	// Map
 	sf::Texture backgroundTexture;
