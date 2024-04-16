@@ -96,8 +96,8 @@ private:
 	}
 	void initWindow()
 	{
-		videoMode.height = 650;
-		videoMode.width = 800;
+		videoMode.height = 525;
+		videoMode.width = 825;
 
 		window = new sf::RenderWindow(videoMode, "My First Game");
 
