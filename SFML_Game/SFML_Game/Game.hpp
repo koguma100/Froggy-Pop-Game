@@ -1,4 +1,3 @@
-#include "Balloon.hpp"
 #include "Tower.hpp"
 
 
@@ -155,7 +154,6 @@ private:
 		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
 		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
 	}
-
 	void initTowers()
 	{
 		Tower frog = Tower(sf::Color::Black, 3, 1, 1);
