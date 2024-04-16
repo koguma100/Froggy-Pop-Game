@@ -1,5 +1,4 @@
-#include "Tower.hpp"
-
+#include "Menu.hpp"
 
 // Class that acts as a game engine: Wrapper Class
 class Game
@@ -14,6 +13,7 @@ public:
 		initBalloons();
 		initCheckpoints();
 		initTowers();
+		initmenu();
 	}
 	~Game()
 	{
@@ -95,7 +95,8 @@ public:
 
 		// Draw Game // 
 		window->draw(background);
-	
+
+		
 
 		// draw balloons
 		for (int i = 0; i < checkpoints.size(); ++i)
@@ -113,6 +114,8 @@ public:
 		{
 			window->draw(frogs[x + 1]);
 		}
+
+		sidemenu.drawmenu(window, 100, 500);
 
 		window->display(); // updates the new frame 
 	}
@@ -140,6 +143,9 @@ private:
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
 
+	//Menu
+	Menu sidemenu;
+
 	// private functions
 	void initVariables()
 	{
@@ -148,11 +154,75 @@ private:
 	void initWindow()
 	{
 		videoMode.height = 525;
-		videoMode.width = 825;
+		videoMode.width = 950; //825
 
 		window = new sf::RenderWindow(videoMode, "Project F");
 
 		window->setFramerateLimit(144);
+
+	}
+
+	void initmenu()
+	{
+		sidemenu = Menu(Vector2f(825, 0), Vector2f(200, 525));
+
+		//Heart Picutre
+
+		if (!sidemenu.getHeart().loadFromFile("Textures/Heart.png", sf::IntRect(0, 0, 80, 80)))
+		{
+			cout << "Image File Heart not found" << endl;
+		}
+
+		sidemenu.getSprite().setTexture(sidemenu.getHeart());
+
+		sidemenu.getSprite().setPosition(Vector2f(15, 15));
+
+		sidemenu.getSprite().setScale(.5, .5);
+
+		//Money Picutre
+
+		if (!sidemenu.getCoins().loadFromFile("Textures/Money.png", sf::IntRect(0, 0, 80, 80)))
+		{
+			cout << "Image File Money not found" << endl;
+		}
+
+		sidemenu.getGold().setTexture(sidemenu.getCoins());
+
+		sidemenu.getGold().setPosition(Vector2f(105, 15));
+
+		sidemenu.getGold().setScale(.5, .5);
+
+
+		//Lives Text
+
+		if (!sidemenu.getFont().loadFromFile("Fonts/Font.ttf"))
+		{
+			cout << "Font File Font not found" << endl;
+		}
+
+		sidemenu.getLivesText().setFont(sidemenu.getFont());
+
+		sidemenu.getLivesText().setString("299");
+
+		sidemenu.getLivesText().setCharacterSize(24);
+
+		sidemenu.getLivesText().setFillColor(sf::Color::White);
+
+		sidemenu.getLivesText().setPosition(Vector2f(55, 15));
+
+		//Coin Text
+
+		sidemenu.getMoneyeco().setFont(sidemenu.getFont());
+
+		sidemenu.getMoneyeco().setString("499");
+
+		sidemenu.getMoneyeco().setCharacterSize(24);
+
+		sidemenu.getMoneyeco().setFillColor(sf::Color::White);
+
+		sidemenu.getMoneyeco().setPosition(Vector2f(145, 15));
+
+
 	}
 
 	void initBackground()
@@ -164,6 +234,7 @@ private:
 
 		background.setTexture(backgroundTexture);
 	}
+
 	void initBalloons()
 	{
 		red = Balloon(1, 15, Vector2f(0, 210));
