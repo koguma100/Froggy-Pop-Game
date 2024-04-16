@@ -94,7 +94,9 @@ public:
 
 		// Draw Game // 
 		window->draw(background);
+	
 
+		// draw balloons
 		for (int i = 0; i < checkpoints.size(); ++i)
 		{
 			window->draw(checkpoints[i]);
@@ -102,6 +104,14 @@ public:
 		window->draw(red);
 		window->draw(blue);
 		window->draw(green);
+
+		// draw towers
+		if (control == ON)
+			window->draw(frogs[0]);
+		for (int x = 0; x < frogs.size() - 1; ++x)
+		{
+			window->draw(frogs[x + 1]);
+		}
 
 		window->display(); // updates the new frame 
 	}
