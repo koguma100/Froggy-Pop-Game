@@ -13,6 +13,7 @@ public:
 		initBackground();
 		initBalloons();
 		initCheckpoints();
+		initTowers();
 	}
 	~Game()
 	{
@@ -146,10 +147,10 @@ private:
 	}
 	void initWindow()
 	{
-		videoMode.height = 650;
-		videoMode.width = 800;
+		videoMode.height = 525;
+		videoMode.width = 825;
 
-		window = new sf::RenderWindow(videoMode, "My First Game");
+		window = new sf::RenderWindow(videoMode, "Project F");
 
 		window->setFramerateLimit(144);
 	}
