@@ -2,7 +2,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 
-#include "Game.h"
+#include "Game.hpp"
 
 int main()
 {
@@ -17,6 +17,7 @@ int main()
 
 		// Render
 		game.render();
+		//cout << sf::Mouse::getPosition().x << ", " << sf::Mouse::getPosition().y << endl;
 	}
 
 

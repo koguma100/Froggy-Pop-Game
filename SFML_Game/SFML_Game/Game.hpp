@@ -1,14 +1,6 @@
-#pragma once
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <SFML/System.hpp>
+#include "Balloon.hpp"
 
-
-using std::cout;
-using std::cin;
-using std::endl;
 
 // Class that acts as a game engine: Wrapper Class
 class Game
@@ -19,7 +11,9 @@ public:
 	{
 		initVariables();
 		initWindow();
-		initEnemies();
+		initBackground();
+		initBalloons();
+		initCheckpoints();
 	}
 	~Game()
 	{
@@ -66,11 +60,22 @@ public:
 
 			Renders the game objects
 		*/
+		red.moveBalloon(checkpoints);
+		blue.moveBalloon(checkpoints);
+		green.moveBalloon(checkpoints);
 
 		window->clear(); // clears the screen
 
 		// Draw Game // 
-		window->draw(enemy); 
+		window->draw(background);
+
+		for (int i = 0; i < checkpoints.size(); ++i)
+		{
+			window->draw(checkpoints[i]);
+		}
+		window->draw(red);
+		window->draw(blue);
+		window->draw(green);
 
 		window->display(); // updates the new frame 
 	}
@@ -83,7 +88,15 @@ private:
 	sf::Event ev;
 
 	// Game Objects
-	sf::RectangleShape enemy;
+	Balloon red,
+			blue,
+			green;
+
+	vector<Checkpoint> checkpoints;
+
+	// Map
+	sf::Texture backgroundTexture;
+	sf::Sprite background;
 
 	// private functions
 	void initVariables()
@@ -99,13 +112,36 @@ private:
 
 		window->setFramerateLimit(144);
 	}
-	void initEnemies() // sets the size of the square
+
+	void initBackground()
 	{
-		enemy.setPosition(350.f, 225.f);
-		enemy.setSize(sf::Vector2f(100.f, 100.f));
-		//enemy.setScale(sf::Vector2f(.5f, .5f));
-		enemy.setFillColor(sf::Color::Cyan);
-		enemy.setOutlineColor(sf::Color::Green);
-		enemy.setOutlineThickness(1.f);
+		if (!backgroundTexture.loadFromFile("Textures/MonkeyMeadow.png"))
+		{
+			cout << "Image File not found" << endl;
+		}
+
+		background.setTexture(backgroundTexture);
+	}
+	void initBalloons()
+	{
+		red = Balloon(1, 15, Vector2f(0, 210));
+		blue = Balloon(2, 15, Vector2f(0, 210));
+		green = Balloon(3, 15, Vector2f(0, 210));
+	}
+
+	void initCheckpoints()
+	{
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(430, 200)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(400, 50)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(220, 80)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(240, 445)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(90, 410)));
+
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(130, 260)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(540, 300)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(500, 140)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(640, 170)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
 	}
 };
