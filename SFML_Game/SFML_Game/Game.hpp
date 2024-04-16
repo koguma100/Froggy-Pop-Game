@@ -1,5 +1,6 @@
 #include "Balloon.hpp"
 #include "Tower.hpp"
+#include "Button.hpp"
 
 // Class that acts as a game engine: Wrapper Class
 class Game
@@ -32,10 +33,7 @@ public:
 		green.moveBalloon();
 	}
 
-	void moveTower() // links the tower with the current mouse position
-	{
-		frogs[0].setPosition(sf::Mouse::getPosition(*window).x - 25.f, sf::Mouse::getPosition(*window).y - 25.f);
-	}
+
 
 	// Other Functions
 	void pollEvents() // What happens in the game
@@ -83,8 +81,7 @@ public:
 		pollEvents();
 
 		balloonMovement();
-		if (control == ON)
-		moveTower();
+		frogs[0].moveTower(window, control);
 	}
 	void render() // graphics
 	{
@@ -101,16 +98,21 @@ public:
 		// Draw Game // 
 		window->draw(background);
 
+		// draw balloons
 		window->draw(red);
 		window->draw(blue);
 		window->draw(green);
+
+		// draw towers
 		if (control == ON)
 		window->draw(frogs[0]);
-
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
 			window->draw(frogs[x + 1]);
 		}
+
+		// draw menu
+		window->draw(but1);
 	
 		window->display(); // updates the new frame 
 	}
@@ -123,13 +125,17 @@ private:
 	sf::Event ev;
 
 	// Game Objects
+	// Balloons
 	Balloon red,
 			blue,
 			green;
 
+	// Towers
 	std::vector<Tower> frogs;
-
 	control control = ON;
+
+	// Menus
+	Button but1;
 
 	// Map
 	sf::Texture backgroundTexture;

@@ -66,7 +66,11 @@ public:
 
 
 	// Real Functions
-
+	void moveTower(sf::RenderWindow *window, control control) // links the tower with the current mouse position
+	{
+		if (control == ON)
+		this->setPosition(sf::Mouse::getPosition(*window).x - 25.f, sf::Mouse::getPosition(*window).y - 25.f);
+	}
 
 private:
 	sf::Color sprite;
