@@ -35,7 +35,7 @@ sf::Text& Menu::getMoneyeco()
 	return Moneyeco;
 }
 
-void Menu::drawmenu(sf::RenderWindow*& window, int livesint, int casheco)
+void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco)
 {
 	window->draw(*this);
 

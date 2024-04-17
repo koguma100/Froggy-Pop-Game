@@ -25,6 +25,7 @@ public:
         }
 
         this->type = type;
+        this->reachedEnd = false;
         direct = RIGHT;
         this->setPosition(pos);
         this->setFillColor(color);
@@ -36,7 +37,11 @@ public:
 
 	void setType(int type);
 
-	void moveBalloon(const vector<Checkpoint>& checkpoints);
+    bool getReachedEnd() const;
+
+    void setReachedEnd(bool reachedEnd);
+
+    void moveBalloon(const vector<Checkpoint>& checkpoints, int& lives);
 
 
 private:
@@ -44,4 +49,16 @@ private:
 	direction direct;
 	sf::Color color;
 	float speed;
+    bool reachedEnd;
 };
+
+typedef struct bloonWave
+{
+    int type,
+        numOfBloons;
+        vector<Balloon*>& bloons;
+} BloonWave;
+
+void bloonWave(BloonWave& wave);
+
+void spawnBalloon(int type, vector<Balloon*>& bloons);

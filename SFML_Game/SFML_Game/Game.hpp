@@ -14,6 +14,10 @@ public:
 		initCheckpoints();
 		initTowers();
 		initmenu();
+		lives = 100;
+		eco = 500;
+		numOfBloons = 0;
+		elapsed_time = clock.getElapsedTime();
 	}
 	~Game()
 	{
@@ -28,9 +32,10 @@ public:
 	
 	void balloonMovement() // moves all the balloons 
 	{
-		red.moveBalloon(checkpoints);
-		blue.moveBalloon(checkpoints);
-		green.moveBalloon(checkpoints);
+		for (int i = 0; i < bloons.size(); ++i)
+		{
+			bloons[i]->moveBalloon(checkpoints, lives);
+		}
 	}
 
 	// Other Functions
@@ -76,8 +81,19 @@ public:
 	}
 	void update() // what actually happens in the game
 	{
-		pollEvents();
+		sf::Time delta_time = sf::milliseconds(500);
 
+		pollEvents();
+		
+		elapsed_time += clock.restart();
+
+		if (numOfBloons < 15 && elapsed_time >= delta_time)
+		{
+			spawnBalloon(1, bloons);
+			numOfBloons++;
+			elapsed_time = sf::milliseconds(0);
+		}
+		
 		balloonMovement();
 		frogs[0].moveTower(window, control);
 	}
@@ -103,9 +119,14 @@ public:
 		{
 			window->draw(checkpoints[i]);
 		}
-		window->draw(red);
-		window->draw(blue);
-		window->draw(green);
+
+		
+
+		for (int i = 0; i < bloons.size(); ++i)
+		{
+			//cout << bloons[i].getPosition().x << endl;
+			window->draw(*bloons[i]);
+		}
 
 		// draw towers
 		if (control == ON)
@@ -115,22 +136,28 @@ public:
 			window->draw(frogs[x + 1]);
 		}
 
-		sidemenu.drawmenu(window, 100, 500);
+		sidemenu.drawmenu(window, lives, eco);
 
 		window->display(); // updates the new frame 
 	}
 
 private:
 	// Variables
+	int lives;
+	int eco;
+	int numOfBloons;
+
 	// Window
 	sf::RenderWindow* window;
 	sf::VideoMode videoMode;
 	sf::Event ev;
 
+	// Game Time 
+	sf::Clock clock;
+	sf::Time elapsed_time;
+
 	// Game Objects
-	Balloon red,
-			blue,
-			green;
+	vector<Balloon*> bloons;
 
 	// Checkpoints
 	vector<Checkpoint> checkpoints;
@@ -222,7 +249,6 @@ private:
 
 		sidemenu.getMoneyeco().setPosition(Vector2f(145, 15));
 
-
 	}
 
 	void initBackground()
@@ -237,9 +263,7 @@ private:
 
 	void initBalloons()
 	{
-		red = Balloon(1, 15, Vector2f(0, 210));
-		blue = Balloon(2, 15, Vector2f(0, 210));
-		green = Balloon(3, 15, Vector2f(0, 210));
+	
 	}
 
 	void initCheckpoints()

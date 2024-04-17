@@ -41,7 +41,7 @@ public:
 
 	sf::Text& getMoneyeco();
 
-	void drawmenu(sf::RenderWindow*& window, int livesint, int casheco); 
+	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco); 
 
  private:
 
