@@ -34,3 +34,59 @@ public:
 private:
 	direction direct;
 };
+
+class Button : public sf::RectangleShape
+{
+public:
+	Button(const Vector2f& pos = Vector2f(0, 0), const Vector2f& size = Vector2f(20, 20), 
+		const sf::Color& color = sf::Color::Green) : RectangleShape(size)
+	{
+		setPosition(pos);
+		setFillColor(color);
+		mode = true;
+	}
+
+	Button(const Button& copy)
+	{
+		setPosition(copy.getPosition());
+		setFillColor(copy.getFillColor());
+		mode = copy.mode;
+	}
+
+	bool getMode()
+	{
+		return mode;
+	}
+
+	void switchMode()
+	{
+		if (mode)
+		{
+			mode = false;
+		}
+		else
+		{
+			mode = true;
+		}
+	}
+
+private:
+	bool mode;
+};
+
+class StartButton : public Button
+{
+public:
+	StartButton(const Vector2f& pos = Vector2f(0, 0), const Vector2f& size = Vector2f(20, 20),
+		const sf::Color& color = sf::Color::Green) : Button(pos, size, color)
+	{
+
+	}
+
+	void onClick(int& round)
+	{
+		round++;
+	}
+
+
+};

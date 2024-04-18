@@ -35,7 +35,7 @@ public:
 	{
 		for (int i = 0; i < bloons.size(); ++i)
 		{
-			bloons[i]->moveBalloon(checkpoints, lives);
+			bloons[i]->moveBalloon(checkpoints, lives, eco);
 		}
 	}
 
@@ -91,6 +91,7 @@ public:
 
 		if (round == 1)	// will probably make a round function to make update less cluttered
 		{
+			// 15 red spaced ruch
 			if (numOfBloons < 15 && elapsed_time >= normal_rush_time)
 			{
 				spawnBalloon(1, bloons);
@@ -98,11 +99,18 @@ public:
 				elapsed_time = sf::milliseconds(0);
 			}
 
-			// 15 bloon group rush
+			// 15 red bloon group rush
 
 			if ((numOfBloons >= 15 && numOfBloons < 30) && elapsed_time >= grouped_rush_time)
 			{
 				spawnBalloon(1, bloons);
+				numOfBloons++;
+				elapsed_time = sf::milliseconds(0);
+			}
+
+			if ((numOfBloons >= 30 && numOfBloons < 45) && elapsed_time >= normal_rush_time)
+			{
+				spawnBalloon(2, bloons);
 				numOfBloons++;
 				elapsed_time = sf::milliseconds(0);
 			}
@@ -194,6 +202,7 @@ private:
 
 	//Menu
 	Menu sidemenu;
+	StartButton playButton;
 
 	// private functions
 	void initVariables()
@@ -215,7 +224,9 @@ private:
 	{
 		sidemenu = Menu(Vector2f(825, 0), Vector2f(200, 525));
 
-		//Heart Picutre
+		playButton = StartButton(Vector2f(500, 500), Vector2f(20, 20), sf::Color::Green);
+
+		//Heart Picture
 
 		if (!sidemenu.getHeart().loadFromFile("Textures/Heart.png", sf::IntRect(0, 0, 80, 80)))
 		{
