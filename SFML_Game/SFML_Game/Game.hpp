@@ -69,6 +69,7 @@ public:
 				{
 					Tower copyFrog = frogs[0];
 					frogs.push_back(copyFrog);
+					control = OFF;
 				}
 				break;
 			}
