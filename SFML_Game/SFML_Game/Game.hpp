@@ -77,7 +77,7 @@ public:
 		frogs[0].moveTower(*window, control);
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
-			frogs[x + 1].trackMouse(*window, red.getPosition());
+			frogs[x + 1].findRotateDeg(red.getPosition());
 		}
 	}
 	void render() // graphics

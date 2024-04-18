@@ -26,7 +26,7 @@ public:
 		this->setOutlineColor(sf::Color::Black);
 		this->setOutlineThickness(1.f);
 		this->setOrigin(getSize().x * .5f, getSize().y * .5f);
-		sightRadius.setOrigin(this->getOrigin().x + 25.f, this->getOrigin().y + 25.f);
+		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
 	}
 	Tower()
 	{
@@ -34,7 +34,7 @@ public:
 		this->setSize(sf::Vector2f(50.f, 50.f));
 		sightRadius.setRadius(50.f);
 		sightRadius.setFillColor(sf::Color::White);
-		sightRadius.setOrigin(this->getOrigin().x + 25.f, this->getOrigin().y + 25.f);
+		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
 	}
 	~Tower()
 	{
@@ -91,11 +91,11 @@ public:
 		if (control == ON)
 		{
 			this->setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
-			sightRadius.setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+			sightRadius.setPosition(this->getPosition());
 		}
 	}
 
-	void trackMouse(sf::RenderWindow &window, sf::Vector2f coordinates)
+	float findRotateDeg(sf::Vector2f coordinates)
 	{
 		float tpx = (this->getPosition().x - coordinates.x);
 		float tpy = (this->getPosition().y - coordinates.y);
@@ -104,7 +104,12 @@ public:
 
 		float rotateDeg = rotateRad * (180 / PI);
 
-		this->setRotation(rotateDeg);
+		return rotateDeg;
+	}
+
+	bool checkInRadius()
+	{
+
 	}
 
 private:
