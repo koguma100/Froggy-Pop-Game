@@ -75,6 +75,13 @@ public:
 				{
 					Tower copyFrog = frogs[0];
 					frogs.push_back(copyFrog);
+					control = OFF;
+				}
+
+
+				if (but1.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					control = ON;
 				}
 				break;
 			}
@@ -124,7 +131,19 @@ public:
 		
 		
 		balloonMovement();
-		frogs[0].moveTower(window, control);
+		
+		// frog updates
+		// track mouse
+		frogs[0].moveTower(*window, control);
+
+		for (int x = 0; x < frogs.size() - 1; ++x)
+		{
+			if (bloons.size() > 0 && frogs[x + 1].checkInRadius(bloons[0]->getPosition()))
+			{
+				frogs[x + 1].findRotateDeg(bloons[0]->getPosition());
+			}
+		}
+
 	}
 	void render() // graphics
 	{
@@ -162,9 +181,13 @@ public:
 			window->draw(frogs[0]);
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
+			window->draw(frogs[x + 1].getSightRadius());
 			window->draw(frogs[x + 1]);
 		}
 
+		window->draw(but1);
+
+		// draw menu
 		sidemenu.drawmenu(window, lives, eco);
 
 		window->display(); // updates the new frame 
@@ -196,13 +219,14 @@ private:
 	std::vector<Tower> frogs;
 	control control = ON;
 
+	Button but1;
+
 	// Map
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
 
 	//Menu
 	Menu sidemenu;
-	StartButton playButton;
 
 	// private functions
 	void initVariables()
@@ -223,8 +247,6 @@ private:
 	void initmenu()
 	{
 		sidemenu = Menu(Vector2f(825, 0), Vector2f(200, 525));
-
-		playButton = StartButton(Vector2f(500, 500), Vector2f(20, 20), sf::Color::Green);
 
 		//Heart Picture
 
@@ -316,7 +338,7 @@ private:
 	}
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 1);
+		Tower frog = Tower(sf::Color::Black, 3, 1, 1, 100.f);
 		frogs.push_back(frog);
 	}
 };
