@@ -17,6 +17,7 @@ public:
 		lives = 100;
 		eco = 500;
 		numOfBloons = 0;
+		round = 1;
 		elapsed_time = clock.getElapsedTime();
 	}
 	~Game()
@@ -81,18 +82,38 @@ public:
 	}
 	void update() // what actually happens in the game
 	{
-		sf::Time delta_time = sf::milliseconds(500);
+		sf::Time normal_rush_time = sf::milliseconds(500);
+		sf::Time grouped_rush_time = sf::milliseconds(100);
 
 		pollEvents();
 		
 		elapsed_time += clock.restart();
 
-		if (numOfBloons < 15 && elapsed_time >= delta_time)
+		if (round == 1)	// will probably make a round function to make update less cluttered
 		{
-			spawnBalloon(1, bloons);
-			numOfBloons++;
-			elapsed_time = sf::milliseconds(0);
+			if (numOfBloons < 15 && elapsed_time >= normal_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				numOfBloons++;
+				elapsed_time = sf::milliseconds(0);
+			}
+
+			// 15 bloon group rush
+
+			if ((numOfBloons >= 15 && numOfBloons < 30) && elapsed_time >= grouped_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				numOfBloons++;
+				elapsed_time = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons))
+			{
+				emptyBloons(bloons);
+			}
 		}
+		// basic 15 bloon normal rush
+		
 		
 		balloonMovement();
 		frogs[0].moveTower(window, control);
@@ -146,6 +167,7 @@ private:
 	int lives;
 	int eco;
 	int numOfBloons;
+	int round;
 
 	// Window
 	sf::RenderWindow* window;

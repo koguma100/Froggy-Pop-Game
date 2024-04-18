@@ -44,6 +44,7 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives)
     {
         reachedEnd = true;
         lives -= type;
+        this->type = 0;
         cout << lives << endl;
     }
 
@@ -65,13 +66,32 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives)
     }
 }
 
-void bloonWave(BloonWave& wave)
-{
-}
-
 void spawnBalloon(int type, vector<Balloon*>& bloons)
 {
     Balloon* temp = new Balloon(type, 15, Vector2f(-30, 210));
 
     bloons.push_back(temp);
+}
+
+void emptyBloons(vector<Balloon*>& bloons)
+{
+    while (bloons.size() > 0)
+    {
+        delete bloons.back();
+        bloons.pop_back();
+    }
+}
+
+bool roundEnded(vector<Balloon*>& bloons)
+{
+    bool ended = true;
+
+    for (int i = 0; i < bloons.size() && ended == true; ++i)
+    {
+        if (bloons[i]->getType() != 0)
+        {
+            ended = false;
+        }
+    }
+    return ended;
 }

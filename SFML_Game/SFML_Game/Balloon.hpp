@@ -59,6 +59,8 @@ typedef struct bloonWave
         vector<Balloon*>& bloons;
 } BloonWave;
 
-void bloonWave(BloonWave& wave);
-
 void spawnBalloon(int type, vector<Balloon*>& bloons);
+
+void emptyBloons(vector<Balloon*>& bloons);
+
+bool roundEnded(vector<Balloon*>& bloons);
