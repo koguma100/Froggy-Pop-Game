@@ -73,12 +73,21 @@ public:
 	{
 		pollEvents();
 
+		// balloon movements
 		balloonMovement();
+
+		// frog updates
+		// track mouse
 		frogs[0].moveTower(*window, control);
+
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
-			frogs[x + 1].findRotateDeg(red.getPosition());
+			if (frogs[x + 1].checkInRadius(red.getPosition()))
+			{
+				frogs[x + 1].findRotateDeg(red.getPosition());
+			}
 		}
+
 	}
 	void render() // graphics
 	{

@@ -20,7 +20,9 @@ public:
 		throwSpeed = newThrowSpeed;
 		throwAmount = newThrowAmount;
 		sightRadius.setRadius(newSightRadius);
-		sightRadius.setFillColor(sf::Color::White);
+		sightRadius.setFillColor(sf::Color::Transparent);
+		sightRadius.setOutlineColor(sf::Color::Blue);
+		sightRadius.setOutlineThickness(3.f);
 		this->setSize(sf::Vector2f(50.f, 50.f));
 		this->setFillColor(sf::Color::Black);
 		this->setOutlineColor(sf::Color::Black);
@@ -95,7 +97,7 @@ public:
 		}
 	}
 
-	float findRotateDeg(sf::Vector2f coordinates)
+	void findRotateDeg(sf::Vector2f coordinates)
 	{
 		float tpx = (this->getPosition().x - coordinates.x);
 		float tpy = (this->getPosition().y - coordinates.y);
@@ -104,12 +106,28 @@ public:
 
 		float rotateDeg = rotateRad * (180 / PI);
 
-		return rotateDeg;
+		this->setRotation(rotateDeg);
 	}
 
-	bool checkInRadius()
+	bool checkInRadius(sf::Vector2f coordinates)
 	{
+		float posBalX = coordinates.x;
+		float posBalY = coordinates.y;
 
+		float posCirX = sightRadius.getPosition().x;
+		float posCirY = sightRadius.getPosition().y;
+
+		float xDisplacement = posBalX - posCirX;
+		float yDisplacement = posBalY - posCirY;
+
+		float hypotenuse = pow(xDisplacement, 2) + pow(yDisplacement, 2);
+		hypotenuse = sqrt(hypotenuse);
+
+		if (hypotenuse < sightRadius.getRadius())
+		{
+			return true;
+		}
+		return false;
 	}
 
 private:

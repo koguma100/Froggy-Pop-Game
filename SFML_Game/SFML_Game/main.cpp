@@ -17,7 +17,6 @@ int main()
 
 		// Render
 		game.render();
-		//cout << sf::Mouse::getPosition().x << ", " << sf::Mouse::getPosition().y << endl;
 	}
 
 
