@@ -10,7 +10,7 @@ public:
 		setPosition(500, 0);
 	}
 
-	bool isMouseOver(sf::RenderWindow& window)
+	bool isMouseOver(sf::RenderWindow& window) // checks to see if the mouse is over the button
 	{
 		float mouseX = sf::Mouse::getPosition(window).x;
 		float mouseY = sf::Mouse::getPosition(window).y;

@@ -74,7 +74,11 @@ public:
 		pollEvents();
 
 		balloonMovement();
-		frogs[0].moveTower(window, control);
+		frogs[0].moveTower(*window, control);
+		for (int x = 0; x < frogs.size() - 1; ++x)
+		{
+			frogs[x + 1].trackMouse(*window, red.getPosition());
+		}
 	}
 	void render() // graphics
 	{
@@ -106,6 +110,7 @@ public:
 			window->draw(frogs[0]);
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
+			window->draw(frogs[x + 1].getSightRadius());
 			window->draw(frogs[x + 1]);
 		}
 
@@ -187,7 +192,7 @@ private:
 	}
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 1);
+		Tower frog = Tower(sf::Color::Black, 3, 1, 1, 100.f);
 		frogs.push_back(frog);
 	}
 };
