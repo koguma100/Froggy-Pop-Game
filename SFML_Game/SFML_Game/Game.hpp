@@ -51,25 +51,19 @@ public:
 				}
 
 
-				if (ev.key.code == sf::Keyboard::O) // changing control
-				{
-					if (control == ON)
-					{
-						control = OFF;
-					}
-					else
-					{
-						control = ON;
-					}
-				}
-
 				break;
 			case sf::Event::MouseButtonPressed:
-				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
+				if (ev.mouseButton.button == sf::Mouse::Left && control == ON) 
 				{
 					Tower copyFrog = frogs[0];
 					frogs.push_back(copyFrog);
 					control = OFF;
+				}
+
+
+				if (but1.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					control = ON;
 				}
 				break;
 			}
@@ -115,6 +109,8 @@ public:
 			window->draw(frogs[x + 1]);
 		}
 
+		window->draw(but1);
+
 		window->display(); // updates the new frame 
 	}
 
@@ -136,6 +132,8 @@ private:
 	// Towers
 	std::vector<Tower> frogs;
 	control control = ON;
+
+	Button but1;
 
 	// Map
 	sf::Texture backgroundTexture;
