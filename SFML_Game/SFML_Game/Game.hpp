@@ -1,4 +1,5 @@
 #include "Tower.hpp"
+#include "Bubble.hpp"
 
 
 // Class that acts as a game engine: Wrapper Class
@@ -14,6 +15,13 @@ public:
 		initBalloons();
 		initCheckpoints();
 		initTowers();
+		
+		bub = Bubble(Vector2f(0, 210));
+
+		if (!bubbleTexture.loadFromFile("Textures/bubble.png")) {
+			cout << "Image not found" << endl;
+		}
+		bub.set_bubble_texture(bubbleTexture);
 	}
 	~Game()
 	{
@@ -80,6 +88,7 @@ public:
 
 		balloonMovement();
 		frogs[0].moveTower(window, control);
+		bub.move_bubble(0.1, 0.1);
 	}
 	void render() // graphics
 	{
@@ -105,6 +114,7 @@ public:
 		window->draw(red);
 		window->draw(blue);
 		window->draw(green);
+		window->draw(bub);
 
 		// draw towers
 		if (control == ON)
@@ -138,7 +148,10 @@ private:
 
 	// Map
 	sf::Texture backgroundTexture;
+	sf::Texture bubbleTexture;
 	sf::Sprite background;
+
+	Bubble bub;
 
 	// private functions
 	void initVariables()
