@@ -20,6 +20,7 @@ public:
 		dFrog.setTexture(texture);
 		throwSpeed = newThrowSpeed;
 		throwAmount = newThrowAmount;
+		bloonInSight = -1;
 		sightRadius.setRadius(newSightRadius);
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOutlineColor(sf::Color::Blue);
@@ -37,6 +38,7 @@ public:
 		sprite = sf::Color::Transparent;
 		this->setSize(sf::Vector2f(50.f, 50.f));
 		sightRadius.setRadius(50.f);
+		bloonInSight = -1;
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
 		
@@ -61,6 +63,10 @@ public:
 	int getThrowAmount()
 	{
 		return throwAmount;
+	}
+	int getBloonInSight()
+	{
+		return bloonInSight;
 	}
 	sf::CircleShape getSightRadius()
 	{
@@ -93,6 +99,10 @@ public:
 	void setThrowAmount(int newThrowAmount)
 	{
 		throwAmount = newThrowAmount;
+	}
+	void setBloonInSight(int bloonIndex)
+	{
+		bloonInSight = bloonIndex;
 	}
 	void setSightRadius(sf::CircleShape newSightRadius)
 	{
@@ -148,7 +158,8 @@ private:
 	sf::Color sprite;
 	//Projectile projectile
 	double throwSpeed;
-	int throwAmount;
+	int throwAmount,
+		bloonInSight;
 	sf::CircleShape sightRadius;
 
 
