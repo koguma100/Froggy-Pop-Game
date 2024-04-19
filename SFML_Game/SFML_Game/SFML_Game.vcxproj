@@ -142,12 +142,16 @@
     <ClCompile Include="Balloon.cpp" />
     <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Balloon.hpp" />
     <ClInclude Include="Bubble.hpp" />
+    <ClInclude Include="Button.hpp" />
     <ClInclude Include="Checkpoint.hpp" />
+    <ClInclude Include="DartFrog.hpp" />
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="Menu.hpp" />
     <ClInclude Include="Tower.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
