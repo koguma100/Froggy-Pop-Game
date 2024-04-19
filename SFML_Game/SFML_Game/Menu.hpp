@@ -58,6 +58,4 @@ public:
 	 sf::Text livestext;
 	 sf::Text Moneyeco;
 
-
-
 };

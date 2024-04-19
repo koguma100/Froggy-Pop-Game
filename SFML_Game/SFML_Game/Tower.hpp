@@ -12,13 +12,14 @@ enum control
 class Tower : public sf::RectangleShape
 {
 public:
-	Tower(sf::Color newSprite, /*Projectile*/ int newProjectile, double newThrowSpeed, int newThrowAmount,
+	Tower(const sf::Color& newSprite, double newThrowSpeed, int newThrowAmount,
 		float newSightRadius)
 	{
 		sprite = newSprite;
 		//projectile = newProjectile;
 		throwSpeed = newThrowSpeed;
 		throwAmount = newThrowAmount;
+		bloonInSight = -1;
 		sightRadius.setRadius(newSightRadius);
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOutlineColor(sf::Color::Blue);
@@ -59,6 +60,10 @@ public:
 	{
 		return throwAmount;
 	}
+	int getBloonInSight()
+	{
+		return bloonInSight;
+	}
 	sf::CircleShape getSightRadius()
 	{
 		return sightRadius;
@@ -80,6 +85,10 @@ public:
 	void setThrowAmount(int newThrowAmount)
 	{
 		throwAmount = newThrowAmount;
+	}
+	void setBloonInSight(int bloonIndex)
+	{
+		bloonInSight = bloonIndex;
 	}
 	void setSightRadius(sf::CircleShape newSightRadius)
 	{
@@ -135,5 +144,6 @@ private:
 	//Projectile projectile
 	double throwSpeed;
 	int throwAmount;
+	int bloonInSight;
 	sf::CircleShape sightRadius;
 };

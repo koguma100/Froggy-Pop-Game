@@ -27,8 +27,10 @@ public:
 		}
 		return false;
 	}
-
+	
 private:
 	sf::Sprite sprite;
+	sf::Texture spriteTexture;
 	int cost;
+	string fileName;
 };

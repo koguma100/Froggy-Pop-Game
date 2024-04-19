@@ -6,10 +6,7 @@ Balloon::Balloon(const Balloon& copy)
     this->color = copy.color;
     this->speed = copy.speed;
     this->direct = copy.direct;
-<<<<<<< HEAD
-=======
     this->reachedEnd = copy.reachedEnd;
->>>>>>> Felix.2
     this->setPosition(copy.getPosition());
 }
 

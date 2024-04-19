@@ -138,6 +138,26 @@ public:
 
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
+
+			if (frogs[x + 1].getBloonInSight() != -1 && bloons[frogs[x + 1].getBloonInSight()]->getType() != 0
+				&& frogs[x + 1].checkInRadius(bloons[frogs[x + 1].getBloonInSight()]->getPosition()))
+			{
+				frogs[x + 1].findRotateDeg(bloons[frogs[x + 1].getBloonInSight()]->getPosition());
+			} 
+			else
+			{
+				frogs[x + 1].setBloonInSight(-1);
+				bool bloonFound = false;
+				for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+				{
+					if (frogs[x + 1].checkInRadius(bloons[i]->getPosition()))
+					{
+						bloonFound = true;
+						frogs[x + 1].setBloonInSight(i);
+						frogs[x + 1].findRotateDeg(bloons[i]->getPosition());
+					}
+				}
+			}
 			if (bloons.size() > 0 && frogs[x + 1].checkInRadius(bloons[0]->getPosition()))
 			{
 				frogs[x + 1].findRotateDeg(bloons[0]->getPosition());
@@ -168,8 +188,6 @@ public:
 			window->draw(checkpoints[i]);
 		}
 
-		
-
 		for (int i = 0; i < bloons.size(); ++i)
 		{
 			//cout << bloons[i].getPosition().x << endl;
@@ -195,10 +213,7 @@ public:
 
 private:
 	// Variables
-	int lives;
-	int eco;
-	int numOfBloons;
-	int round;
+	int lives, eco, numOfBloons, round;
 
 	// Window
 	sf::RenderWindow* window;
@@ -338,7 +353,7 @@ private:
 	}
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 1, 100.f);
+		Tower frog = Tower(sf::Color::Black, 3, 1, 100.f);
 		frogs.push_back(frog);
 	}
 };
