@@ -41,7 +41,13 @@ public:
 
 	sf::Text& getMoneyeco();
 
-	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco); 
+	sf::Text& getRound();
+
+	sf::Text& getRoundCount();
+
+	sf::Text& getMenuTowerText();
+
+	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco, int& RdCount); 
 
  private:
 
@@ -57,6 +63,9 @@ public:
 	 sf::Font font;
 	 sf::Text livestext;
 	 sf::Text Moneyeco;
+	 sf::Text Round;
+	 sf::Text RoundCount;
+	 sf::Text MenuTowerText;
 
 
 

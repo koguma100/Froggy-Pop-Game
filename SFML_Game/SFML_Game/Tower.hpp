@@ -12,11 +12,12 @@ enum control
 class Tower : public sf::RectangleShape
 {
 public:
-	Tower(sf::Color newSprite, /*Projectile*/ int newProjectile, double newThrowSpeed, int newThrowAmount,
+	Tower(/*Projectile*/  const sf::Texture& texture, int newProjectile, double newThrowSpeed, int newThrowAmount,
 		float newSightRadius)
 	{
-		sprite = newSprite;
 		//projectile = newProjectile;
+		dFrogTexture = texture;
+		dFrog.setTexture(texture);
 		throwSpeed = newThrowSpeed;
 		throwAmount = newThrowAmount;
 		sightRadius.setRadius(newSightRadius);
@@ -29,14 +30,16 @@ public:
 		this->setOutlineThickness(1.f);
 		this->setOrigin(getSize().x * .5f, getSize().y * .5f);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
+		dFrog.setOrigin(dFrog.getTexture()->getSize().x *.5f, dFrog.getTexture()->getSize().y *.5f);
 	}
 	Tower()
 	{
-		sprite = sf::Color::Black;
+		sprite = sf::Color::Transparent;
 		this->setSize(sf::Vector2f(50.f, 50.f));
 		sightRadius.setRadius(50.f);
-		sightRadius.setFillColor(sf::Color::White);
+		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
+		
 	}
 	~Tower()
 	{
@@ -62,6 +65,16 @@ public:
 	sf::CircleShape getSightRadius()
 	{
 		return sightRadius;
+	}
+
+	sf::Sprite& getdFrogSprite()
+	{
+		return dFrog;
+	}
+
+	sf::Texture& getdFrogTexture()
+	{
+		return dFrogTexture;
 	}
 
 	// Setters
@@ -94,6 +107,7 @@ public:
 		{
 			this->setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			sightRadius.setPosition(this->getPosition());
+			dFrog.setPosition(getPosition());
 		}
 	}
 
@@ -136,4 +150,8 @@ private:
 	double throwSpeed;
 	int throwAmount;
 	sf::CircleShape sightRadius;
+
+
+	sf::Sprite dFrog;
+	sf::Texture dFrogTexture;
 };

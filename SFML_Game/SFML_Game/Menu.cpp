@@ -35,7 +35,22 @@ sf::Text& Menu::getMoneyeco()
 	return Moneyeco;
 }
 
-void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco)
+sf::Text& Menu::getRound()
+{
+	return Round;
+}
+
+sf::Text& Menu::getRoundCount()
+{
+	return RoundCount;
+}
+
+sf::Text& Menu::getMenuTowerText()
+{
+	return MenuTowerText;
+}
+
+void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco, int& RdCount)
 {
 	window->draw(*this);
 
@@ -50,5 +65,13 @@ void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco)
 	Moneyeco.setString(std::to_string(casheco));
 
 	window->draw(Moneyeco);
+
+	window->draw(Round);
+
+	RoundCount.setString(std::to_string(RdCount));
+
+	window->draw(RoundCount);
+
+	window->draw(MenuTowerText);
 
 }

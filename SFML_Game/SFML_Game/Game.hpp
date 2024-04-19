@@ -12,12 +12,14 @@ public:
 		initBackground();
 		initBalloons();
 		initCheckpoints();
+		initTexure();
 		initTowers();
 		initmenu();
+		initbutton();
 		lives = 100;
 		eco = 500;
 		numOfBloons = 0;
-		round = 1;
+		roundcount = 1;
 		elapsed_time = clock.getElapsedTime();
 	}
 	~Game()
@@ -75,6 +77,7 @@ public:
 				{
 					Tower copyFrog = frogs[0];
 					frogs.push_back(copyFrog);
+					
 					control = OFF;
 				}
 
@@ -96,7 +99,7 @@ public:
 		
 		elapsed_time += clock.restart();
 
-		if (round == 1)	// will probably make a round function to make update less cluttered
+		if (roundcount == 1)	// will probably make a round function to make update less cluttered
 		{
 			// 15 red spaced ruch
 			if (numOfBloons < 15 && elapsed_time >= normal_rush_time)
@@ -176,19 +179,20 @@ public:
 			window->draw(*bloons[i]);
 		}
 
-		// draw towers
+		 //draw towers
 		if (control == ON)
 			window->draw(frogs[0]);
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
 			window->draw(frogs[x + 1].getSightRadius());
 			window->draw(frogs[x + 1]);
+			window->draw(frogs[x + 1].getdFrogSprite());
 		}
 
-		window->draw(but1);
-
 		// draw menu
-		sidemenu.drawmenu(window, lives, eco);
+		sidemenu.drawmenu(window, lives, eco, roundcount);
+
+		dart.drawbutton(window);
 
 		window->display(); // updates the new frame 
 	}
@@ -198,7 +202,7 @@ private:
 	int lives;
 	int eco;
 	int numOfBloons;
-	int round;
+	int roundcount;
 
 	// Window
 	sf::RenderWindow* window;
@@ -217,6 +221,7 @@ private:
 
 	// Towers
 	std::vector<Tower> frogs;
+	std::vector<Tower> dartfrogs;
 	control control = ON;
 
 	Button but1;
@@ -227,6 +232,15 @@ private:
 
 	//Menu
 	Menu sidemenu;
+
+	//Button
+	Button dart;
+
+	//Sprite
+	sf::Sprite dFrogSprite;
+
+	//Texture
+	sf::Texture dartFrogTexture;
 
 	// private functions
 	void initVariables()
@@ -304,6 +318,58 @@ private:
 
 		sidemenu.getMoneyeco().setPosition(Vector2f(145, 15));
 
+		//Round
+
+		sidemenu.getRound().setFont(sidemenu.getFont());
+
+		sidemenu.getRound().setString("Round");
+
+		sidemenu.getRound().setCharacterSize(24);
+
+		sidemenu.getRound().setFillColor(sf::Color::White);
+
+		sidemenu.getRound().setPosition(Vector2f(705, 15));
+
+		//Round Count
+
+		sidemenu.getRoundCount().setFont(sidemenu.getFont());
+
+		sidemenu.getRoundCount().setString("1");
+
+		sidemenu.getRoundCount().setCharacterSize(24);
+
+		sidemenu.getRoundCount().setFillColor(sf::Color::White);
+
+		sidemenu.getRoundCount().setPosition(Vector2f(735, 45));
+
+		//Menu Tower Text
+
+		sidemenu.getMenuTowerText().setFont(sidemenu.getFont());
+
+		sidemenu.getMenuTowerText().setString("Towers");
+
+		sidemenu.getMenuTowerText().setCharacterSize(24);
+
+		sidemenu.getMenuTowerText().setFillColor(sf::Color::Magenta);
+
+		sidemenu.getMenuTowerText().setPosition(Vector2f(845, 15));
+	}
+
+	void initbutton()
+	{
+		//dart.getSprite().setTexture(dart.getTexture());
+
+		if (!dart.getTexture().loadFromFile("Textures/dart.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		dart.getSprite().setTexture(dart.getTexture());
+
+		dart.getSprite().setPosition(Vector2f(810, 55));
+
+		dart.getSprite().setScale(1, 1);
+
 	}
 
 	void initBackground()
@@ -314,6 +380,16 @@ private:
 		}
 
 		background.setTexture(backgroundTexture);
+
+		//background.setScale(10, 10);
+	}
+
+	void initTexure()
+	{
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Dart.png wasn't loaded" << endl;
+		}
 	}
 
 	void initBalloons()
@@ -338,7 +414,12 @@ private:
 	}
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 1, 100.f);
+		Tower frog = Tower(dartFrogTexture, 3, 1, 1, 100.f);
 		frogs.push_back(frog);
+
+		//dFrogSprite = dart.getSprite();
+
+		/*Tower dartfrog = Tower(dFrogSprite, 3, 1, 1, 100.f);
+		frogs.push_back(dartfrog);*/
 	}
 };
