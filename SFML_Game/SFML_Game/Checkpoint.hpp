@@ -5,12 +5,15 @@
 #include <SFML/Audio.hpp>
 #include <SFML/System.hpp>
 #include <vector>
+#include <string>
 
 using std::cout;
 using std::cin;
 using std::endl;
 using std::vector;
+using std::string;
 using sf::Vector2f;
+
 
 enum direction
 {

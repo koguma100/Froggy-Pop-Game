@@ -1,4 +1,4 @@
-#include "Checkpoint.hpp"
+#include "Bubble.hpp"
 
 class Balloon : public sf::CircleShape
 {
@@ -25,6 +25,7 @@ public:
         }
 
         this->type = type;
+        this->reachedEnd = false;
         direct = RIGHT;
         this->setPosition(pos);
         this->setFillColor(color);
@@ -36,12 +37,29 @@ public:
 
 	void setType(int type);
 
-	void moveBalloon(const vector<Checkpoint>& checkpoints);
+    bool getReachedEnd() const;
 
+    void setReachedEnd(bool reachedEnd);
+
+    void moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int& eco);
 
 private:
 	int type;
 	direction direct;
 	sf::Color color;
 	float speed;
+    bool reachedEnd;
 };
+
+typedef struct bloonWave
+{
+    int type,
+        numOfBloons;
+        vector<Balloon*>& bloons;
+} BloonWave;
+
+void spawnBalloon(int type, vector<Balloon*>& bloons);
+
+void emptyBloons(vector<Balloon*>& bloons);
+
+bool roundEnded(vector<Balloon*>& bloons);
