@@ -41,7 +41,7 @@ public:
 
     void setReachedEnd(bool reachedEnd);
 
-    void moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int& eco);
+    void moveBalloon(const vector<Checkpoint>& checkpoints, int& lives);
 
 
 private:

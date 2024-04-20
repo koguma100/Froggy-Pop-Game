@@ -26,8 +26,8 @@ public:
 		sightRadius.setOutlineColor(sf::Color::Blue);
 		sightRadius.setOutlineThickness(3.f);
 		this->setSize(sf::Vector2f(50.f, 50.f));
-		this->setFillColor(sf::Color::Black);
-		this->setOutlineColor(sf::Color::Black);
+		this->setFillColor(sf::Color::Transparent);
+		this->setOutlineColor(sf::Color::Transparent);
 		this->setOutlineThickness(1.f);
 		this->setOrigin(getSize().x * .5f, getSize().y * .5f);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
@@ -119,6 +119,11 @@ public:
 			sightRadius.setPosition(this->getPosition());
 			dFrog.setPosition(getPosition());
 		}
+		else
+		{
+			setPosition(Vector2f(860, 110));
+			dFrog.setPosition(getPosition());
+		}
 	}
 
 	void findRotateDeg(sf::Vector2f coordinates)
@@ -130,7 +135,7 @@ public:
 
 		float rotateDeg = rotateRad * (180 / PI);
 
-		this->setRotation(rotateDeg);
+		this->dFrog.setRotation(rotateDeg);
 	}
 
 	bool checkInRadius(sf::Vector2f coordinates)

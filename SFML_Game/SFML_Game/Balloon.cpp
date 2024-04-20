@@ -30,7 +30,7 @@ void Balloon::setReachedEnd(bool reachedEnd)
     this->reachedEnd = reachedEnd;
 }
 
-void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int& eco)
+void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives)
 {
     for (int i = 0; i < checkpoints.size(); ++i)
     {
@@ -44,9 +44,8 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int
     {
         reachedEnd = true;
         lives -= type;
-        eco += type;
         this->type = 0;
-        cout << "Lives: " << lives << "   Eco: " << eco << endl;
+        cout << "Lives: " << lives << endl;
     }
 
     if (direct == UP)

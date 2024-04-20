@@ -12,7 +12,7 @@ public:
 		initBackground();
 		initBalloons();
 		initCheckpoints();
-		initTexure();
+		initTexture();
 		initTowers();
 		initmenu();
 		initbutton();
@@ -37,7 +37,7 @@ public:
 	{
 		for (int i = 0; i < bloons.size(); ++i)
 		{
-			bloons[i]->moveBalloon(checkpoints, lives, eco);
+			bloons[i]->moveBalloon(checkpoints, lives);
 		}
 	}
 
@@ -183,8 +183,6 @@ public:
 		// Draw Game // 
 		window->draw(background);
 
-		
-
 		// draw balloons
 		for (int i = 0; i < checkpoints.size(); ++i)
 		{
@@ -202,6 +200,7 @@ public:
 		 //draw towers
 		if (control == ON)
 			window->draw(frogs[0]);
+			window->draw(frogs[0].getdFrogSprite());
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
 			window->draw(frogs[x + 1].getSightRadius());
@@ -244,8 +243,6 @@ private:
 	std::vector<Tower> dartfrogs;
 	control control = ON;
 
-	Button but1;
-
 	// Map
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
@@ -255,12 +252,14 @@ private:
 
 	//Button
 	Button dart;
+	Button but1;
 
 	//Sprite
 	sf::Sprite dFrogSprite;
 
 	//Texture
 	sf::Texture dartFrogTexture;
+	sf::Texture bubbleTexture;
 
 	// private functions
 	void initVariables()
@@ -404,9 +403,9 @@ private:
 		//background.setScale(10, 10);
 	}
 
-	void initTexure()
+	void initTexture()
 	{
-		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(10, 10, 80, 80)))
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(17, 17, 80, 80)))
 		{
 			cout << "Dart.png wasn't loaded" << endl;
 		}
