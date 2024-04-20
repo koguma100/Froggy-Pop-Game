@@ -3,7 +3,7 @@
 class Balloon : public sf::CircleShape
 {
 public:
-	Balloon(int type = 1, float size = 20, const sf::Vector2f& pos = sf::Vector2f(0, 0)) : CircleShape(size) {
+	Balloon(int type = 1, float size = 30, const sf::Vector2f& pos = sf::Vector2f(0, 0)) : CircleShape(size) {
         switch (type)
         {
         case 1:

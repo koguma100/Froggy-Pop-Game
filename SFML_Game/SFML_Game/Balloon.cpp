@@ -40,7 +40,7 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int
         }
     }
 
-    if (!reachedEnd && getPosition().y > 525)
+    if (!reachedEnd && getPosition().y > 1000)
     {
         reachedEnd = true;
         lives -= type;
@@ -69,7 +69,7 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int
 
 void spawnBalloon(int type, vector<Balloon*>& bloons)
 {
-    Balloon* temp = new Balloon(type, 15, Vector2f(-30, 210));
+    Balloon* temp = new Balloon(type, 20, Vector2f(-30, 360));
 
     bloons.push_back(temp);
 }

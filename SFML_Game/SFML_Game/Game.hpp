@@ -13,7 +13,7 @@ public:
 		initBalloons();
 		initCheckpoints();
 		initTowers();
-		initmenu();
+		initMenu();
 		lives = 100;
 		eco = 500;
 		numOfBloons = 0;
@@ -206,7 +206,7 @@ public:
 		window->draw(but1);
 
 		// draw menu
-		sidemenu.drawmenu(window, lives, eco);
+		sideMenu.drawmenu(window, lives, eco);
 
 		window->display(); // updates the new frame 
 	}
@@ -241,7 +241,7 @@ private:
 	sf::Sprite background;
 
 	//Menu
-	Menu sidemenu;
+	Menu sideMenu;
 
 	// private functions
 	void initVariables()
@@ -250,8 +250,8 @@ private:
 	}
 	void initWindow()
 	{
-		videoMode.height = 525;
-		videoMode.width = 950; //825
+		videoMode.height = 900;
+		videoMode.width = 1800; //825
 
 		window = new sf::RenderWindow(videoMode, "Project F");
 
@@ -259,65 +259,65 @@ private:
 
 	}
 
-	void initmenu()
+	void initMenu()
 	{
-		sidemenu = Menu(Vector2f(825, 0), Vector2f(200, 525));
+		sideMenu = Menu(Vector2f(1525, 0), Vector2f(375, 900));
 
 		//Heart Picture
 
-		if (!sidemenu.getHeart().loadFromFile("Textures/Heart.png", sf::IntRect(0, 0, 80, 80)))
+		if (!sideMenu.getHeart().loadFromFile("Textures/Heart.png", sf::IntRect(0, 0, 80, 80)))
 		{
 			cout << "Image File Heart not found" << endl;
 		}
 
-		sidemenu.getSprite().setTexture(sidemenu.getHeart());
+		sideMenu.getSprite().setTexture(sideMenu.getHeart());
 
-		sidemenu.getSprite().setPosition(Vector2f(15, 15));
+		sideMenu.getSprite().setPosition(Vector2f(15, 15));
 
-		sidemenu.getSprite().setScale(.5, .5);
+		sideMenu.getSprite().setScale(.5, .5);
 
 		//Money Picutre
 
-		if (!sidemenu.getCoins().loadFromFile("Textures/Money.png", sf::IntRect(0, 0, 80, 80)))
+		if (!sideMenu.getCoins().loadFromFile("Textures/Money.png", sf::IntRect(0, 0, 80, 80)))
 		{
 			cout << "Image File Money not found" << endl;
 		}
 
-		sidemenu.getGold().setTexture(sidemenu.getCoins());
+		sideMenu.getGold().setTexture(sideMenu.getCoins());
 
-		sidemenu.getGold().setPosition(Vector2f(105, 15));
+		sideMenu.getGold().setPosition(Vector2f(105, 15));
 
-		sidemenu.getGold().setScale(.5, .5);
+		sideMenu.getGold().setScale(.5, .5);
 
 
 		//Lives Text
 
-		if (!sidemenu.getFont().loadFromFile("Fonts/Font.ttf"))
+		if (!sideMenu.getFont().loadFromFile("Fonts/Font.ttf"))
 		{
 			cout << "Font File Font not found" << endl;
 		}
 
-		sidemenu.getLivesText().setFont(sidemenu.getFont());
+		sideMenu.getLivesText().setFont(sideMenu.getFont());
 
-		sidemenu.getLivesText().setString("299");
+		sideMenu.getLivesText().setString("299");
 
-		sidemenu.getLivesText().setCharacterSize(24);
+		sideMenu.getLivesText().setCharacterSize(24);
 
-		sidemenu.getLivesText().setFillColor(sf::Color::White);
+		sideMenu.getLivesText().setFillColor(sf::Color::White);
 
-		sidemenu.getLivesText().setPosition(Vector2f(55, 15));
+		sideMenu.getLivesText().setPosition(Vector2f(55, 15));
 
 		//Coin Text
 
-		sidemenu.getMoneyeco().setFont(sidemenu.getFont());
+		sideMenu.getMoneyeco().setFont(sideMenu.getFont());
 
-		sidemenu.getMoneyeco().setString("499");
+		sideMenu.getMoneyeco().setString("499");
 
-		sidemenu.getMoneyeco().setCharacterSize(24);
+		sideMenu.getMoneyeco().setCharacterSize(24);
 
-		sidemenu.getMoneyeco().setFillColor(sf::Color::White);
+		sideMenu.getMoneyeco().setFillColor(sf::Color::White);
 
-		sidemenu.getMoneyeco().setPosition(Vector2f(145, 15));
+		sideMenu.getMoneyeco().setPosition(Vector2f(145, 15));
 
 	}
 
@@ -329,6 +329,7 @@ private:
 		}
 
 		background.setTexture(backgroundTexture);
+		background.setScale(1.85f, 1.70f);
 	}
 
 	void initBalloons()
@@ -338,22 +339,22 @@ private:
 
 	void initCheckpoints()
 	{
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(430, 200)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(400, 50)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(220, 80)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(240, 445)));
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(90, 410)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(770, 350)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(720, 125)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(460, 140)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(480, 740)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(210, 710)));
 
-		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(130, 260)));
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(540, 300)));
-		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(500, 140)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(640, 170)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(230, 475)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(975, 500)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(940, 255)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(1170, 300)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(1140, 670)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(630, 640)));
 	}
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 100.f);
+		Tower frog = Tower(sf::Color::Black, 3, 1, 150.f);
 		frogs.push_back(frog);
 	}
 };

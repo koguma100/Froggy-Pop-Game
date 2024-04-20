@@ -24,7 +24,7 @@ public:
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOutlineColor(sf::Color::Blue);
 		sightRadius.setOutlineThickness(3.f);
-		this->setSize(sf::Vector2f(50.f, 50.f));
+		this->setSize(sf::Vector2f(65.f, 65.f));
 		this->setFillColor(sf::Color::Black);
 		this->setOutlineColor(sf::Color::Black);
 		this->setOutlineThickness(1.f);
