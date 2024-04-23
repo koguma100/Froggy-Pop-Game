@@ -41,8 +41,27 @@ public:
 		bloonInSight = -1;
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
-		
 	}
+	/*Tower(const Tower& copy)
+	{
+		dFrogTexture = copy.dFrogTexture;
+		dFrog.setTexture(copy.dFrogTexture);
+		throwSpeed = copy.throwSpeed;
+		throwAmount = copy.throwAmount;
+		bloonInSight = copy.bloonInSight;
+		sightRadius.setRadius(copy.sightRadius.getRadius());
+		sightRadius.setFillColor(sf::Color::Transparent);
+		sightRadius.setOutlineColor(sf::Color::Blue);
+		sightRadius.setOutlineThickness(3.f);
+		this->setSize(sf::Vector2f(50.f, 50.f));
+		this->setFillColor(sf::Color::Transparent);
+		this->setOutlineColor(sf::Color::Transparent);
+		this->setOutlineThickness(copy.getOutlineThickness());
+		this->setOrigin(copy.getOrigin());
+		sightRadius.setOrigin(copy.sightRadius.getRadius(), copy.sightRadius.getRadius());
+		dFrog.setOrigin(copy.dFrog.getTexture()->getSize().x * .5f, copy.dFrog.getTexture()->getSize().y * .5f);
+
+	}*/
 	~Tower()
 	{
 	}

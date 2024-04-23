@@ -1,12 +1,16 @@
 #include "Balloon.hpp"
 
+enum towertype
+{
+	DART = 1, NINJA = 2, TACK = 3, WIZARD = 4
+};
 class Button : public sf::CircleShape
 {
 public:
 	Button(const string& filename = " ")
 	{
 		setRadius(25.f);
-		setFillColor(sf::Color::Transparent);
+		setFillColor(sf::Color::Red);
 		setPosition(830, 80);
 	}
 

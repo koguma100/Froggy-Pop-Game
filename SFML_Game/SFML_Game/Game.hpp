@@ -20,6 +20,7 @@ public:
 		eco = 500;
 		numOfBloons = 0;
 		roundcount = 1;
+		towerselected = DART;
 		elapsed_time = clock.getElapsedTime();
 	}
 	~Game()
@@ -76,15 +77,63 @@ public:
 				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
 				{
 					Tower copyFrog = frogs[0];
+
+					sf::RenderWindow thing;
+					sf::Mouse::getPosition(thing);
+
+					sf::Vector2f mousePosition = thing.mapPixelToCoords(sf::Mouse::getPosition(thing));
+
+					switch (towerselected)
+					{
+					case DART:
+						copyFrog = frogs[0];
+						/*dFrogSprite.setTexture(dartFrogTexture);
+						dFrogSprite.setPosition(mousePosition);*/
+						break;
+					case NINJA:
+						copyFrog = frogs[1];
+						/*nFrogSprite.setTexture(ninjaFrogTexture);
+						nFrogSprite.setPosition(mousePosition);*/
+						break;
+					case TACK:
+						copyFrog = frogs[2];
+						/*tFrogSprite.setTexture(tackFrogTexture);
+						tFrogSprite.setPosition(mouse);*/
+						break;
+					case WIZARD:
+						copyFrog = frogs[3];
+						/*wFrogSprite.setTexture(wizardFrogTexture);
+						wFrogSprite.setPosition(mousePosition);*/
+						break;
+					default:
+						copyFrog = frogs[0];
+						break;
+					}
 					frogs.push_back(copyFrog);
 					
 					control = OFF;
 				}
 
 
-				if (but1.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				if (dart.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
 				{
 					control = ON;
+					towerselected = DART;
+				}
+				else if (ninja.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					control = ON;
+					towerselected = NINJA;
+				}
+				else if (tack.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					control = ON;
+					towerselected = TACK;
+				}
+				else if (wizard.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					control = ON;
+					towerselected = WIZARD;
 				}
 				break;
 			}
@@ -137,7 +186,24 @@ public:
 		
 		// frog updates
 		// track mouse
-		frogs[0].moveTower(*window, control);
+		switch (towerselected)
+		{
+		case DART:
+			frogs[0].moveTower(*window, control);
+			break;
+		case NINJA:
+			frogs[1].moveTower(*window, control);
+			break;
+		case TACK:
+			frogs[2].moveTower(*window, control);
+			break;
+		case WIZARD:
+			frogs[3].moveTower(*window, control);
+			break;
+		default:
+			frogs[0].moveTower(*window, control);
+			break;
+		}
 
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
@@ -213,6 +279,12 @@ public:
 
 		dart.drawbutton(window);
 
+		ninja.drawbutton(window);
+
+		tack.drawbutton(window);
+
+		wizard.drawbutton(window);
+
 		window->display(); // updates the new frame 
 	}
 
@@ -243,6 +315,8 @@ private:
 	std::vector<Tower> dartfrogs;
 	control control = ON;
 
+	towertype towerselected;
+
 	// Map
 	sf::Texture backgroundTexture;
 	sf::Sprite background;
@@ -252,13 +326,24 @@ private:
 
 	//Button
 	Button dart;
-	Button but1;
+	Button ninja;
+	Button tack;
+	Button wizard;
+
+//	Button but1;
 
 	//Sprite
 	sf::Sprite dFrogSprite;
+	sf::Sprite nFrogSprite;
+	sf::Sprite tFrogSprite;
+	sf::Sprite wFrogSprite;
+	sf::Sprite bubble;
 
 	//Texture
 	sf::Texture dartFrogTexture;
+	sf::Texture ninjaFrogTexture;
+	sf::Texture tackFrogTexture;
+	sf::Texture wizardFrogTexture;
 	sf::Texture bubbleTexture;
 
 	// private functions
@@ -375,20 +460,64 @@ private:
 	}
 
 	void initbutton()
-	{
-		//dart.getSprite().setTexture(dart.getTexture());
+	{	
+		//Dart
 
-		if (!dart.getTexture().loadFromFile("Textures/dart.png", sf::IntRect(10, 10, 80, 80)))
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(17, 17, 80, 80)))
 		{
-			cout << "Image File dart not found" << endl;
+			cout << "Dart.png wasn't loaded" << endl;
 		}
 
-		dart.getSprite().setTexture(dart.getTexture());
+		dart.getSprite().setTexture(dartFrogTexture);
 
 		dart.getSprite().setPosition(Vector2f(810, 55));
 
 		dart.getSprite().setScale(1, 1);
 
+		//Ninja
+
+		if (!ninja.getTexture().loadFromFile("Textures/greninja.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		ninja.getSprite().setTexture(ninja.getTexture());
+
+		ninja.setPosition(Vector2f(830, 150));
+
+		ninja.getSprite().setPosition(Vector2f(820, 120));
+
+		ninja.getSprite().setScale(1, 1);
+
+		//Tack
+
+		if (!tack.getTexture().loadFromFile("Textures/tack.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		tack.getSprite().setTexture(tack.getTexture());
+
+		tack.setPosition(Vector2f(910, 80));
+
+		tack.getSprite().setPosition(Vector2f(875, 55));
+
+		tack.getSprite().setScale(1, 1);
+
+		//Wizard
+
+		if (!wizard.getTexture().loadFromFile("Textures/Wizard.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		wizard.getSprite().setTexture(wizard.getTexture());
+
+		wizard.setPosition(Vector2f(910, 150));
+
+		wizard.getSprite().setPosition(Vector2f(880, 120));
+
+		wizard.getSprite().setScale(1, 1);
 	}
 
 	void initBackground()
@@ -405,9 +534,32 @@ private:
 
 	void initTexture()
 	{
+		//Dart
+		
 		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(17, 17, 80, 80)))
 		{
 			cout << "Dart.png wasn't loaded" << endl;
+		}
+
+		//Ninja
+
+		if (!ninjaFrogTexture.loadFromFile("Textures/greninja.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		//Tack
+
+		if (!tackFrogTexture.loadFromFile("Textures/tack.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		//Wizard
+
+		if (!wizardFrogTexture.loadFromFile("Textures/Wizard.png", sf::IntRect(10, 10, 80, 80)))
+		{
+			cout << "Image File dart not found" << endl;
 		}
 	}
 
@@ -433,12 +585,20 @@ private:
 	}
 	void initTowers()
 	{
-		Tower frog = Tower(dartFrogTexture, 3, 1, 1, 100.f);
-		frogs.push_back(frog);
+		Tower dart = Tower(dartFrogTexture, 3, 1, 1, 100.f);
+		dart.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(dart);
 
-		//dFrogSprite = dart.getSprite();
+		Tower ninja = Tower(ninjaFrogTexture, 3, 1, 1, 100.f);
+		ninja.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(ninja);
 
-		/*Tower dartfrog = Tower(dFrogSprite, 3, 1, 1, 100.f);
-		frogs.push_back(dartfrog);*/
+		Tower tack = Tower(tackFrogTexture, 3, 1, 1, 100.f);
+		tack.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(tack);
+
+		Tower wizard = Tower(wizardFrogTexture, 3, 1, 1, 100.f);
+		wizard.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(wizard);
 	}
 };
