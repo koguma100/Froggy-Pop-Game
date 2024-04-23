@@ -9,7 +9,7 @@ class Button : public sf::CircleShape
 public:
 	Button(const string& filename = " ")
 	{
-		setRadius(25.f);
+		setRadius(40.f);
 		setFillColor(sf::Color::Red);
 		setPosition(830, 80);
 	}

@@ -12,11 +12,11 @@ enum control
 class Tower : public sf::RectangleShape
 {
 public:
-	Tower(const sf::Color& newSprite, sf::Time newThrowSpeed, int newThrowAmount,
+	Tower(const sf::Texture& texture, sf::Time newThrowSpeed, int newThrowAmount,
 		float newSightRadius)
 	{
-		sprite = newSprite;
-		//projectile = newProjectile;
+		dFrogTexture = texture;
+		dFrog.setTexture(texture);
 		throwSpeed = newThrowSpeed;
 		throwAmount = newThrowAmount;
 		shooting = false;
@@ -27,15 +27,15 @@ public:
 		sightRadius.setOutlineColor(sf::Color::Blue);
 		sightRadius.setOutlineThickness(3.f);
 		this->setSize(sf::Vector2f(50.f, 50.f));
-		this->setFillColor(sf::Color::Black);
-		this->setOutlineColor(sf::Color::Black);
+		this->setFillColor(sf::Color::Transparent);
+		this->setOutlineColor(sf::Color::Transparent);
 		this->setOutlineThickness(1.f);
 		this->setOrigin(getSize().x * .5f, getSize().y * .5f);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
+		dFrog.setOrigin(dFrog.getTexture()->getSize().x * .5f, dFrog.getTexture()->getSize().y * .5f);
 	}
 	Tower()
 	{
-		sprite = sf::Color::Black;
 		this->setSize(sf::Vector2f(50.f, 50.f));
 		sightRadius.setRadius(50.f);
 		sightRadius.setFillColor(sf::Color::White);
@@ -46,14 +46,6 @@ public:
 	}
 
 	// getters
-	sf::Color getSprite()
-	{
-		return sprite;
-	}
-	//Projectile getProjectile()
-	//{
-	//	return projectile;
-	//}
 	sf::Time getThrowSpeed()
 	{
 		return throwSpeed;
@@ -70,6 +62,17 @@ public:
 	{
 		return sightRadius;
 	}
+
+	sf::Sprite& getdFrogSprite()
+	{
+		return dFrog;
+	}
+
+	sf::Texture& getdFrogTexture()
+	{
+		return dFrogTexture;
+	}
+
 	bool getShooting()
 	{
 		return shooting;
@@ -86,14 +89,7 @@ public:
 	}
 
 	// Setters
-	void setSprite(sf::Color newSprite)
-	{
-		sprite = newSprite;
-	}
-	//void setProjectile(Projectile newProjectile)
-	//{
-	//	projectile = newProjectile;
-	//}
+
 	void setThrowSpeed(sf::Time newThrowSpeed)
 	{
 		throwSpeed = newThrowSpeed;
@@ -128,6 +124,12 @@ public:
 		{
 			this->setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			sightRadius.setPosition(this->getPosition());
+			dFrog.setPosition(getPosition());
+		}
+		else
+		{
+			setPosition(Vector2f(2000, 110));
+			dFrog.setPosition(getPosition());
 		}
 	}
 
@@ -141,6 +143,8 @@ public:
 		float rotateDeg = rotateRad * (180 / PI);
 
 		this->setRotation(rotateDeg);
+
+		this->dFrog.setRotation(rotateDeg);
 
 		return rotateDeg;
 	}
@@ -173,8 +177,7 @@ public:
 	}
 
 private:
-	sf::Color sprite;
-	//Projectile projectile
+
 	sf::Time throwSpeed;
 	sf::Time elapsedTimeShoot;
 	int throwAmount;
@@ -182,4 +185,6 @@ private:
 	bool shooting;
 	sf::CircleShape sightRadius;
 	vector<Bubble> projectiles;
+	sf::Sprite dFrog;
+	sf::Texture dFrogTexture;
 };
