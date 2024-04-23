@@ -21,6 +21,7 @@ public:
 		throwAmount = newThrowAmount;
 		shooting = false;
 		bloonInSight = -1;
+		elapsedTimeShoot = sf::milliseconds(0);
 		sightRadius.setRadius(newSightRadius);
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOutlineColor(sf::Color::Blue);
@@ -74,6 +75,11 @@ public:
 		return shooting;
 	}
 
+	sf::Time getElapsedTimeShoot()
+	{
+		return elapsedTimeShoot;
+	}
+
 	vector<Bubble>& getProjectiles()
 	{
 		return projectiles;
@@ -108,6 +114,11 @@ public:
 	void setShooting(bool mode)
 	{
 		shooting = true;
+	}
+
+	void setElapsedTimeShoot(sf::Time time)
+	{
+		elapsedTimeShoot = time;
 	}
 
 	// Real Functions
@@ -165,6 +176,7 @@ private:
 	sf::Color sprite;
 	//Projectile projectile
 	sf::Time throwSpeed;
+	sf::Time elapsedTimeShoot;
 	int throwAmount;
 	int bloonInSight;
 	bool shooting;

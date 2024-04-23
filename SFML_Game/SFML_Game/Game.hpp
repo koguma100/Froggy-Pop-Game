@@ -19,8 +19,7 @@ public:
 		eco = 500;
 		numOfBloons = 0;
 		round = 1;
-		elapsed_time_bloons = clock.getElapsedTime();
-		elapsed_time_shoot = elapsed_time_bloons;
+		elapsed_time_bloons = sf::milliseconds(0);
 	}
 	~Game()
 	{
@@ -57,8 +56,6 @@ public:
 				{
 					window->close();
 				}
-
-
 				if (ev.key.code == sf::Keyboard::O) // changing control
 				{
 					if (control == ON)
@@ -75,9 +72,13 @@ public:
 			case sf::Event::MouseButtonPressed:
 				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
 				{
-					Tower copyFrog = frogs[0];
-					frogs.push_back(copyFrog);
-					control = OFF;
+					if (eco >= 200)
+					{
+						Tower copyFrog = frogs[0];
+						frogs.push_back(copyFrog);
+						eco -= 200;
+						control = OFF;
+					}
 				} 
 
 				if (but1.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
@@ -97,53 +98,125 @@ public:
 		
 		sf::Time tempInterval = clock.restart();
 		elapsed_time_bloons += tempInterval;
-		elapsed_time_shoot += tempInterval;
+		for (int i = 0; i < frogs.size() - 1; ++i)
+		{
+			frogs[i + 1].setElapsedTimeShoot(frogs[i + 1].getElapsedTimeShoot() + tempInterval);
+		}
 
 		//+++++++++++++++++++++++++++++++++START OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 
-		if (round == 1)	// will probably make a round function to make update less cluttered
+		switch (round)	// round system
 		{
+		case 1:
 			// 15 red spaced ruch
-			if (numOfBloons < 15 && elapsed_time_bloons >= normal_rush_time)
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(1, bloons);
-				numOfBloons++;
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
 			// 15 red bloon group rush
-			if ((numOfBloons >= 15 && numOfBloons < 30) && elapsed_time_bloons >= grouped_rush_time)
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
 			{
 				spawnBalloon(1, bloons);
-				numOfBloons++;
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
-			if ((numOfBloons >= 30 && numOfBloons < 45) && elapsed_time_bloons >= normal_rush_time)
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(2, bloons);
-				numOfBloons++;
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
-		}
 
-		balloonMovement();
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 300;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		case 2:
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			{
+				cout << "butt" << endl;
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 400;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		case 3:
+			if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+			{
+				cout << "butt" << endl;
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(4, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+			if ((bloons.size() >= 45 && bloons.size() < 60) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 400;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		}
 
 		//+++++++++++++++++++++++++++++++++END OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 		
 		// frog updates
 		// track mouse
-		frogs[0].moveTower(*window, control);
-
-		bool validBloon = true;
-		float towerDegree = 0.0;
-
-		if (roundEnded(bloons))
+		if (!roundEnded(bloons))
 		{
-			emptyBloons(bloons);
-		}
-		else
-		{
+			balloonMovement();
+
+			frogs[0].moveTower(*window, control);
+
+			bool validBloon = true;
+			float towerDegree = 0.0;
+
 			for (int x = 0; x < frogs.size() - 1; ++x)
 			{
 				if (frogs[x + 1].getBloonInSight() != -1 && bloons[frogs[x + 1].getBloonInSight()]->getType() != 0
@@ -151,11 +224,11 @@ public:
 				{
 					towerDegree = frogs[x + 1].findRotateDeg(bloons[frogs[x + 1].getBloonInSight()]->getPosition());
 
-					if (elapsed_time_shoot >= frogs[x + 1].getThrowSpeed())
+					if (frogs[x + 1].getElapsedTimeShoot() >= frogs[x + 1].getThrowSpeed())
 					{
 						frogs[x + 1].shootProjectile(towerDegree);
 						frogs[x + 1].getProjectiles()[frogs[x + 1].getProjectiles().size() - 1].setTexture(bubbleTexture);
-						elapsed_time_shoot = sf::milliseconds(0);
+						frogs[x + 1].setElapsedTimeShoot(sf::milliseconds(0));
 					}
 				}
 				else
@@ -181,7 +254,7 @@ public:
 				{
 					for (int bloonIndex = 0; bloonIndex < bloons.size(); ++bloonIndex)
 					{
-						if (frogs[x + 1].getProjectiles()[i].getBloonsPopped().size() > 0)
+						if (frogs[x + 1].getProjectiles()[i].getBloonsPopped().size() > 0)	// change for penetration difference
 						{
 							frogs[x + 1].getProjectiles()[i].setActive(false);
 						}
@@ -201,17 +274,18 @@ public:
 								if (validBloon)
 								{
 									bloons[bloonIndex]->bloonPop();
+									eco++;
 									frogs[x + 1].getProjectiles()[i].bloonHit(bloonIndex);
 								}
 							}
 						}
-						
+
 					}
 					frogs[x + 1].getProjectiles()[i].move_bubble();
 				}
 			}
 		}
-
+		
 	}
 	void render() // graphics
 	{
@@ -244,12 +318,15 @@ public:
 
 		// draw towers
 		if (control == ON)
+		{
 			window->draw(frogs[0]);
+			window->draw(frogs[0].getSightRadius());
+		}
+			
 		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
-			window->draw(frogs[x + 1].getSightRadius());
-			window->draw(frogs[x + 1]);
-			
+			//window->draw(frogs[x + 1].getSightRadius());
+
 			for (int i = 0; i < frogs[x + 1].getProjectiles().size(); ++i)
 			{
 				if (frogs[x + 1].getProjectiles()[i].isActive())
@@ -257,13 +334,23 @@ public:
 					window->draw(frogs[x + 1].getProjectiles()[i]);
 				}
 			}
-			
+			window->draw(frogs[x + 1]);
+				
 		}
 
 		window->draw(but1);
 
 		// draw menu
 		sidemenu.drawmenu(window, lives, eco);
+
+		if (lives <= 0)
+		{
+			sf::RectangleShape black = sf::RectangleShape(Vector2f(1600, 340));
+			black.setFillColor(sf::Color::Black);
+			black.setPosition(100, 300);
+			window->draw(black);
+			window->draw(gameOverMessage);
+		}
 
 		window->display(); // updates the new frame 
 	}
@@ -280,11 +367,13 @@ private:
 	// Game Time 
 	sf::Clock clock;
 	sf::Time elapsed_time_bloons;
-	sf::Time elapsed_time_shoot;
 
 	// Game Objects
 	vector<Balloon*> bloons;
 	sf::Texture bubbleTexture;
+
+	// Game Over Text
+	sf::Text gameOverMessage;
 
 	// Checkpoints
 	vector<Checkpoint> checkpoints;
@@ -309,8 +398,8 @@ private:
 	}
 	void initWindow()
 	{
-		videoMode.height = 525;
-		videoMode.width = 950; //825
+		videoMode.height = 900;
+		videoMode.width = 1800; //825
 
 		window = new sf::RenderWindow(videoMode, "Project F");
 
@@ -320,7 +409,7 @@ private:
 
 	void initmenu()
 	{
-		sidemenu = Menu(Vector2f(825, 0), Vector2f(200, 525));
+		sidemenu = Menu(Vector2f(1525, 0), Vector2f(375, 900));
 
 		//Heart Picture
 
@@ -388,6 +477,7 @@ private:
 		}
 
 		background.setTexture(backgroundTexture);
+		background.setScale(1.85f, 1.70f);
 	}
 
 	void initBalloons()
@@ -397,31 +487,39 @@ private:
 
 	void initCheckpoints()
 	{
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(430, 200)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(400, 50)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(220, 80)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(240, 445)));
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(90, 410)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(770, 350)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(720, 125)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(460, 140)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(480, 740)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(210, 710)));
 
-		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(130, 260)));
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(540, 300)));
-		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(500, 140)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(640, 170)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(230, 475)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(975, 500)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(940, 255)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(1170, 300)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(1140, 670)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(630, 640)));
 	}
 
-	void initTextures()
+	void initTextures()		// includes game over message init
 	{
 		if (!bubbleTexture.loadFromFile("Textures/bubble.png"))
 		{
 			cout << "Bubble.png file not found" << endl;
 		}
+
+		gameOverMessage.setFont(sidemenu.getFont());
+		gameOverMessage.setFillColor(sf::Color::Red);
+		gameOverMessage.setCharacterSize(256);
+		gameOverMessage.setPosition(200, 300);
+		gameOverMessage.setStyle(sf::Text::Bold);
+		gameOverMessage.setString("Game Over!");
+
 	}
 
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, sf::milliseconds(300), 1, 100.f);
+		Tower frog = Tower(sf::Color::Black, sf::milliseconds(500), 1, 200.f);
 		frogs.push_back(frog);
 	}
 };

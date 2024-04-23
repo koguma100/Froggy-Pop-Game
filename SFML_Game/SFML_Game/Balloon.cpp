@@ -45,7 +45,7 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int
         }
     }
 
-    if (!reachedEnd && getPosition().y > 525)
+    if (!reachedEnd && getPosition().y > 1000)
     {
         reachedEnd = true;
         lives -= type;
@@ -78,7 +78,7 @@ void Balloon::bloonPop()
 
     if (type > 0)
     {
-        *this = Balloon(type - 1, 15, getPosition());
+        *this = Balloon(type - 1, 20, getPosition());
         this->direct = temp;
 
         cout << "Bloon popped!" << endl;
@@ -87,18 +87,14 @@ void Balloon::bloonPop()
 
 void spawnBalloon(int type, vector<Balloon*>& bloons)
 {
-    Balloon* temp = new Balloon(type, 15, Vector2f(-30, 210));
+    Balloon* temp = new Balloon(type, 20, Vector2f(-30, 360));
 
     bloons.push_back(temp);
 }
 
 void emptyBloons(vector<Balloon*>& bloons)
 {
-    while (bloons.size() > 0)
-    {
-        delete bloons.back();
-        bloons.pop_back();
-    }
+    bloons.clear();
 }
 
 bool roundEnded(vector<Balloon*>& bloons)
@@ -107,7 +103,7 @@ bool roundEnded(vector<Balloon*>& bloons)
 
     for (int i = 0; i < bloons.size() && ended == true; ++i)
     {
-        if (bloons[i]->getType() != 0)
+        if (!bloons[i]->getReachedEnd())
         {
             ended = false;
         }

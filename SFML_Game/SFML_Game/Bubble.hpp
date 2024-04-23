@@ -10,8 +10,8 @@ public:
         hitbox = sf::FloatRect(position, size);
         this->setPosition(position);
         active = true;
-        movementX = cos((degreeAngle + 60) * 3.14159 / 180);
-        movementY = sin((degreeAngle + 60) * 3.14159 / 180);
+        movementX = cos((degreeAngle + 80) * 3.14159 / 180) * 2;
+        movementY = sin((degreeAngle + 80) * 3.14159 / 180) * 2;
     }
 
     bool isActive();
