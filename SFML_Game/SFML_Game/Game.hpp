@@ -14,11 +14,13 @@ public:
 		initCheckpoints();
 		initTowers();
 		initmenu();
+		initTextures();
 		lives = 100;
 		eco = 500;
 		numOfBloons = 0;
 		round = 1;
-		elapsed_time = clock.getElapsedTime();
+		elapsed_time_bloons = clock.getElapsedTime();
+		elapsed_time_shoot = elapsed_time_bloons;
 	}
 	~Game()
 	{
@@ -76,8 +78,7 @@ public:
 					Tower copyFrog = frogs[0];
 					frogs.push_back(copyFrog);
 					control = OFF;
-				}
-
+				} 
 
 				if (but1.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
 				{
@@ -94,73 +95,120 @@ public:
 
 		pollEvents();
 		
-		elapsed_time += clock.restart();
+		sf::Time tempInterval = clock.restart();
+		elapsed_time_bloons += tempInterval;
+		elapsed_time_shoot += tempInterval;
+
+		//+++++++++++++++++++++++++++++++++START OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 
 		if (round == 1)	// will probably make a round function to make update less cluttered
 		{
 			// 15 red spaced ruch
-			if (numOfBloons < 15 && elapsed_time >= normal_rush_time)
+			if (numOfBloons < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(1, bloons);
 				numOfBloons++;
-				elapsed_time = sf::milliseconds(0);
+				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
 			// 15 red bloon group rush
-
-			if ((numOfBloons >= 15 && numOfBloons < 30) && elapsed_time >= grouped_rush_time)
+			if ((numOfBloons >= 15 && numOfBloons < 30) && elapsed_time_bloons >= grouped_rush_time)
 			{
 				spawnBalloon(1, bloons);
 				numOfBloons++;
-				elapsed_time = sf::milliseconds(0);
+				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
-			if ((numOfBloons >= 30 && numOfBloons < 45) && elapsed_time >= normal_rush_time)
+			if ((numOfBloons >= 30 && numOfBloons < 45) && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(2, bloons);
 				numOfBloons++;
-				elapsed_time = sf::milliseconds(0);
-			}
-
-			if (roundEnded(bloons))
-			{
-				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
 			}
 		}
-		// basic 15 bloon normal rush
-		
-		
+
 		balloonMovement();
+
+		//+++++++++++++++++++++++++++++++++END OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 		
 		// frog updates
 		// track mouse
 		frogs[0].moveTower(*window, control);
 
-		for (int x = 0; x < frogs.size() - 1; ++x)
-		{
+		bool validBloon = true;
+		float towerDegree = 0.0;
 
-			if (frogs[x + 1].getBloonInSight() != -1 && bloons[frogs[x + 1].getBloonInSight()]->getType() != 0
-				&& frogs[x + 1].checkInRadius(bloons[frogs[x + 1].getBloonInSight()]->getPosition()))
+		if (roundEnded(bloons))
+		{
+			emptyBloons(bloons);
+		}
+		else
+		{
+			for (int x = 0; x < frogs.size() - 1; ++x)
 			{
-				frogs[x + 1].findRotateDeg(bloons[frogs[x + 1].getBloonInSight()]->getPosition());
-			} 
-			else
-			{
-				frogs[x + 1].setBloonInSight(-1);
-				bool bloonFound = false;
-				for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+				if (frogs[x + 1].getBloonInSight() != -1 && bloons[frogs[x + 1].getBloonInSight()]->getType() != 0
+					&& frogs[x + 1].checkInRadius(bloons[frogs[x + 1].getBloonInSight()]->getPosition()))
 				{
-					if (frogs[x + 1].checkInRadius(bloons[i]->getPosition()))
+					towerDegree = frogs[x + 1].findRotateDeg(bloons[frogs[x + 1].getBloonInSight()]->getPosition());
+
+					if (elapsed_time_shoot >= frogs[x + 1].getThrowSpeed())
 					{
-						bloonFound = true;
-						frogs[x + 1].setBloonInSight(i);
-						frogs[x + 1].findRotateDeg(bloons[i]->getPosition());
+						frogs[x + 1].shootProjectile(towerDegree);
+						frogs[x + 1].getProjectiles()[frogs[x + 1].getProjectiles().size() - 1].setTexture(bubbleTexture);
+						elapsed_time_shoot = sf::milliseconds(0);
 					}
 				}
-			}
-			if (bloons.size() > 0 && frogs[x + 1].checkInRadius(bloons[0]->getPosition()))
-			{
-				frogs[x + 1].findRotateDeg(bloons[0]->getPosition());
+				else
+				{
+					frogs[x + 1].setBloonInSight(-1);
+					bool bloonFound = false;
+					for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+					{
+						if (frogs[x + 1].checkInRadius(bloons[i]->getPosition()))
+						{
+							bloonFound = true;
+							frogs[x + 1].setBloonInSight(i);
+							frogs[x + 1].findRotateDeg(bloons[i]->getPosition());
+						}
+					}
+				}
+				/*if (bloons.size() > 0 && frogs[x + 1].checkInRadius(bloons[0]->getPosition()))
+				{
+					frogs[x + 1].findRotateDeg(bloons[0]->getPosition());
+				}*/
+
+				for (int i = 0; i < frogs[x + 1].getProjectiles().size(); ++i)
+				{
+					for (int bloonIndex = 0; bloonIndex < bloons.size(); ++bloonIndex)
+					{
+						if (frogs[x + 1].getProjectiles()[i].getBloonsPopped().size() > 0)
+						{
+							frogs[x + 1].getProjectiles()[i].setActive(false);
+						}
+						else
+						{
+							if (frogs[x + 1].getProjectiles()[i].getGlobalBounds().intersects(bloons[bloonIndex]->getGlobalBounds()))
+							{
+								validBloon = true;
+
+								for (int k = 0; k < frogs[x + 1].getProjectiles()[i].getBloonsPopped().size(); k++)
+								{
+									if (frogs[x + 1].getProjectiles()[i].getBloonsPopped()[k] == bloonIndex)
+									{
+										validBloon = false;
+									}
+								}
+								if (validBloon)
+								{
+									bloons[bloonIndex]->bloonPop();
+									frogs[x + 1].getProjectiles()[i].bloonHit(bloonIndex);
+								}
+							}
+						}
+						
+					}
+					frogs[x + 1].getProjectiles()[i].move_bubble();
+				}
 			}
 		}
 
@@ -201,6 +249,15 @@ public:
 		{
 			window->draw(frogs[x + 1].getSightRadius());
 			window->draw(frogs[x + 1]);
+			
+			for (int i = 0; i < frogs[x + 1].getProjectiles().size(); ++i)
+			{
+				if (frogs[x + 1].getProjectiles()[i].isActive())
+				{
+					window->draw(frogs[x + 1].getProjectiles()[i]);
+				}
+			}
+			
 		}
 
 		window->draw(but1);
@@ -222,10 +279,12 @@ private:
 
 	// Game Time 
 	sf::Clock clock;
-	sf::Time elapsed_time;
+	sf::Time elapsed_time_bloons;
+	sf::Time elapsed_time_shoot;
 
 	// Game Objects
 	vector<Balloon*> bloons;
+	sf::Texture bubbleTexture;
 
 	// Checkpoints
 	vector<Checkpoint> checkpoints;
@@ -351,9 +410,18 @@ private:
 		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
 		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
 	}
+
+	void initTextures()
+	{
+		if (!bubbleTexture.loadFromFile("Textures/bubble.png"))
+		{
+			cout << "Bubble.png file not found" << endl;
+		}
+	}
+
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 100.f);
+		Tower frog = Tower(sf::Color::Black, sf::milliseconds(300), 1, 100.f);
 		frogs.push_back(frog);
 	}
 };

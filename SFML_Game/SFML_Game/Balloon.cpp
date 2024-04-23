@@ -20,6 +20,11 @@ void Balloon::setType(int type)
     this->type = type;
 }
 
+void Balloon::setDirection(direction direct)
+{
+    this->direct = direct;
+}
+
 bool Balloon::getReachedEnd() const
 {
     return reachedEnd;
@@ -64,6 +69,19 @@ void Balloon::moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int
     else if (direct == LEFT)
     {
         this->move(speed * -1, 0);
+    }
+}
+
+void Balloon::bloonPop()
+{
+    direction temp = direct;
+
+    if (type > 0)
+    {
+        *this = Balloon(type - 1, 15, getPosition());
+        this->direct = temp;
+
+        cout << "Bloon popped!" << endl;
     }
 }
 

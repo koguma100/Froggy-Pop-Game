@@ -6,6 +6,10 @@ public:
 	Balloon(int type = 1, float size = 20, const sf::Vector2f& pos = sf::Vector2f(0, 0)) : CircleShape(size) {
         switch (type)
         {
+        case 0:
+            color = sf::Color::Transparent;
+            speed = 10;
+            break;
         case 1:
 
             color = sf::Color::Red;
@@ -37,11 +41,15 @@ public:
 
 	void setType(int type);
 
+    void setDirection(direction direct);
+
     bool getReachedEnd() const;
 
     void setReachedEnd(bool reachedEnd);
 
     void moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int& eco);
+
+    void bloonPop();
 
 private:
 	int type;

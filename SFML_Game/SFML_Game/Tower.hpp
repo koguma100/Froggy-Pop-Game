@@ -12,13 +12,14 @@ enum control
 class Tower : public sf::RectangleShape
 {
 public:
-	Tower(const sf::Color& newSprite, double newThrowSpeed, int newThrowAmount,
+	Tower(const sf::Color& newSprite, sf::Time newThrowSpeed, int newThrowAmount,
 		float newSightRadius)
 	{
 		sprite = newSprite;
 		//projectile = newProjectile;
 		throwSpeed = newThrowSpeed;
 		throwAmount = newThrowAmount;
+		shooting = false;
 		bloonInSight = -1;
 		sightRadius.setRadius(newSightRadius);
 		sightRadius.setFillColor(sf::Color::Transparent);
@@ -52,7 +53,7 @@ public:
 	//{
 	//	return projectile;
 	//}
-	double getThrowSpeed()
+	sf::Time getThrowSpeed()
 	{
 		return throwSpeed;
 	}
@@ -68,6 +69,15 @@ public:
 	{
 		return sightRadius;
 	}
+	bool getShooting()
+	{
+		return shooting;
+	}
+
+	vector<Bubble>& getProjectiles()
+	{
+		return projectiles;
+	}
 
 	// Setters
 	void setSprite(sf::Color newSprite)
@@ -78,7 +88,7 @@ public:
 	//{
 	//	projectile = newProjectile;
 	//}
-	void setThrowSpeed(double newThrowSpeed)
+	void setThrowSpeed(sf::Time newThrowSpeed)
 	{
 		throwSpeed = newThrowSpeed;
 	}
@@ -95,6 +105,10 @@ public:
 		sightRadius = newSightRadius;
 	}
 
+	void setShooting(bool mode)
+	{
+		shooting = true;
+	}
 
 	// Real Functions
 	void moveTower(sf::RenderWindow& window, control control) // links the tower with the current mouse position
@@ -106,7 +120,7 @@ public:
 		}
 	}
 
-	void findRotateDeg(sf::Vector2f coordinates)
+	float findRotateDeg(sf::Vector2f coordinates)
 	{
 		float tpx = (this->getPosition().x - coordinates.x);
 		float tpy = (this->getPosition().y - coordinates.y);
@@ -116,6 +130,8 @@ public:
 		float rotateDeg = rotateRad * (180 / PI);
 
 		this->setRotation(rotateDeg);
+
+		return rotateDeg;
 	}
 
 	bool checkInRadius(sf::Vector2f coordinates)
@@ -139,11 +155,19 @@ public:
 		return false;
 	}
 
+	void shootProjectile(float degrees)
+	{
+		Bubble temp = Bubble(sf::Vector2f(getPosition().x - 20, getPosition().y - 20), degrees);
+		projectiles.push_back(temp);
+	}
+
 private:
 	sf::Color sprite;
 	//Projectile projectile
-	double throwSpeed;
+	sf::Time throwSpeed;
 	int throwAmount;
 	int bloonInSight;
+	bool shooting;
 	sf::CircleShape sightRadius;
+	vector<Bubble> projectiles;
 };
