@@ -203,23 +203,10 @@ public:
 		switch (round)	// round system
 		{
 		case 1:
-			// 15 red spaced ruch
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			// 15 red spaced rush
+			if (bloons.size() < 30 && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
@@ -227,12 +214,80 @@ public:
 			{
 				emptyBloons(bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 300;
+				eco += 100;
 				round++;
 				cout << "Round: " << round << endl;
 			}
 			break;
 		case 2:
+			if (bloons.size() < 7 && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 7 && bloons.size() < 14) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 130;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		case 3:
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 28) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 28 && bloons.size() < 30) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 140;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		case 4:
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 160;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		case 5:
 			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(2, bloons);
@@ -240,15 +295,9 @@ public:
 			}
 
 			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+			if ((bloons.size() >= 15 && bloons.size() < 28) && elapsed_time_bloons >= grouped_rush_time)
 			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(3, bloons);
+				spawnBalloon(1, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
@@ -256,41 +305,32 @@ public:
 			{
 				emptyBloons(bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 400;
+				eco += 180;
 				round++;
 				cout << "Round: " << round << endl;
 			}
 			break;
-		case 3:
-			if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+
+		case 6:
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 28) && elapsed_time_bloons >= grouped_rush_time)
 			{
 				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(3, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(4, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-			if ((bloons.size() >= 45 && bloons.size() < 60) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(3, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
 
 			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
 			{
 				emptyBloons(bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 400;
+				eco += 200;
 				round++;
 				cout << "Round: " << round << endl;
 			}
