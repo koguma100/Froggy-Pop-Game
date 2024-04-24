@@ -878,7 +878,7 @@ private:
 			cout << "Bubble.png file not found" << endl;
 		}
 
-		if (!fireballTexture.loadFromFile("Textures/fireball.png"))
+		if (!fireballTexture.loadFromFile("Textures/fireball.png", sf::IntRect(10, 8, 54, 54)))
 		{
 			cout << "fireball.png not found" << endl;
 		}
