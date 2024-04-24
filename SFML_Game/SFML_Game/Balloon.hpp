@@ -26,6 +26,10 @@ public:
             color = sf::Color::Yellow;
             speed = 1.75;
             break; 
+        case 5:
+            color = sf::Color::Magenta;
+            speed = 2;
+            break;
         default:
             color = sf::Color::Red;
             speed = 1;

@@ -75,16 +75,15 @@ public:
 			case sf::Event::MouseButtonPressed:
 				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
 				{
-					Tower copyFrog = frogs[0];
-
 					switch (towerSelected)
 					{
 					case DART:
 						if (eco >= dartCost)
 						{
 							eco -= dartCost;
-							copyFrog = frogs[0];
-							frogs.push_back(copyFrog);
+							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
 							control = OFF;
 						}
 						break;
@@ -92,8 +91,9 @@ public:
 						if (eco >= ninjaCost)
 						{
 							eco -= ninjaCost;
-							copyFrog = frogs[1];
-							frogs.push_back(copyFrog);
+							NinjaFrog* temp = new NinjaFrog(ninjaFrogTexture, sf::milliseconds(1500), 1, 200.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
 							control = OFF;
 						}
 						break;
@@ -101,8 +101,9 @@ public:
 						if (eco >= tackCost)
 						{
 							eco -= tackCost;
-							copyFrog = frogs[2];
-							frogs.push_back(copyFrog);
+							TackFrog* temp = new TackFrog(tackFrogTexture, sf::milliseconds(2000), 2, 66.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
 							control = OFF;
 						}
 						break;
@@ -110,8 +111,8 @@ public:
 						if (eco >= wizardCost)
 						{
 							eco -= wizardCost;
-							copyFrog = frogs[3];
-							frogs.push_back(copyFrog);
+							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							frogs.push_back(temp);
 							control = OFF;
 						}
 						break;
@@ -119,8 +120,9 @@ public:
 						if (eco >= dartCost)
 						{
 							eco -= dartCost;
-							copyFrog = frogs[0];
-							frogs.push_back(copyFrog);
+							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
 							control = OFF;
 						}
 						break;
@@ -160,6 +162,24 @@ public:
 					}
 					towerSelected = WIZARD;
 				}
+				if (ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					bool towerFound = false;
+					for (int i = 4; i < frogs.size() && !towerFound; ++i)
+					{
+						if (frogs[i]->isMouseOver(*window))
+						{
+							cout << "POOP" << endl;
+							currentTower = i;
+							towerFound = true;
+						}
+					}
+					if (!towerFound)
+					{
+						currentTower = -1;
+					}
+				}
+
 				break;
 			}
 		}
@@ -175,7 +195,7 @@ public:
 		elapsed_time_bloons += tempInterval;
 		for (int i = 0; i < frogs.size() - 1; ++i)
 		{
-			frogs[i + 1].setElapsedTimeShoot(frogs[i + 1].getElapsedTimeShoot() + tempInterval);
+			frogs[i + 1]->setElapsedTimeShoot(frogs[i + 1]->getElapsedTimeShoot() + tempInterval);
 		}
 
 		//+++++++++++++++++++++++++++++++++START OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
@@ -288,19 +308,19 @@ public:
 			switch (towerSelected)
 			{
 			case DART:
-				frogs[0].moveTower(*window, control);
+				dartFrog.moveTower(*window, control);
 				break;
 			case NINJA:
-				frogs[1].moveTower(*window, control);
+				ninjaFrog.moveTower(*window, control);
 				break;
 			case TACK:
-				frogs[2].moveTower(*window, control);
+				tackFrog.moveTower(*window, control);
 				break;
 			case WIZARD:
-				frogs[3].moveTower(*window, control);
+				frogs[3]->moveTower(*window, control);
 				break;
 			default:
-				frogs[0].moveTower(*window, control);
+				dartFrog.moveTower(*window, control);
 				break;
 			}
 
@@ -309,40 +329,51 @@ public:
 
 			for (int x = 0; x < frogs.size() - 4; ++x)
 			{
-				frogs[x + 4].shoot(bloons, bubbleTexture, towerDegree);
+				frogs[x + 4]->shoot(bloons, bubbleTexture, towerDegree);
 
-				for (int i = 0; i < frogs[x + 4].getProjectiles().size(); ++i)
+				for (int i = 0; i < frogs[x + 4]->getProjectiles().size(); ++i)
 				{
-					for (int bloonIndex = 0; bloonIndex < bloons.size(); ++bloonIndex)
+					if (!(frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(frogs[x + 4]->getSightRadius().getGlobalBounds())))
 					{
-						if (frogs[x + 4].getProjectiles()[i].getBloonsPopped().size() >= frogs[x + 4].getPierce())	// change for penetration difference
+						frogs[x + 4]->getProjectiles()[i].setActive(false);
+					}
+					else
+					{
+						if (frogs[x + 4]->getProjectiles()[i].isActive())
 						{
-							frogs[x + 4].getProjectiles()[i].setActive(false);
-						}
-						else
-						{
-							if (frogs[x + 4].getProjectiles()[i].getGlobalBounds().intersects(bloons[bloonIndex]->getGlobalBounds()))
+							for (int bloonIndex = 0; bloonIndex < bloons.size(); ++bloonIndex)
 							{
-								validBloon = true;
-
-								for (int k = 0; k < frogs[x + 4].getProjectiles()[i].getBloonsPopped().size(); k++)
+								if (frogs[x + 4]->getProjectiles()[i].getBloonsPopped().size() >= frogs[x + 4]->getPierce())	// change for penetration difference
 								{
-									if (frogs[x + 4].getProjectiles()[i].getBloonsPopped()[k] == bloonIndex)
+									frogs[x + 4]->getProjectiles()[i].setActive(false);
+								}
+								else
+								{
+									if (frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(bloons[bloonIndex]->getGlobalBounds()))
 									{
-										validBloon = false;
+										validBloon = true;
+
+										for (int k = 0; k < frogs[x + 4]->getProjectiles()[i].getBloonsPopped().size(); k++)
+										{
+											if (frogs[x + 4]->getProjectiles()[i].getBloonsPopped()[k] == bloonIndex)
+											{
+												validBloon = false;
+											}
+										}
+										if (validBloon)
+										{
+											bloons[bloonIndex]->bloonPop();
+											eco++;
+											frogs[x + 4]->getProjectiles()[i].bloonHit(bloonIndex);
+										}
 									}
 								}
-								if (validBloon)
-								{
-									bloons[bloonIndex]->bloonPop();
-									eco++;
-									frogs[x + 4].getProjectiles()[i].bloonHit(bloonIndex);
-								}
+
 							}
 						}
-
 					}
-					frogs[x + 4].getProjectiles()[i].move_bubble();
+					
+					frogs[x + 4]->getProjectiles()[i].move_bubble();
 				}
 			}
 		}
@@ -392,24 +423,24 @@ public:
 			switch (towerSelected)
 			{
 			case DART:
-				window->draw(frogs[0]);
-				window->draw(frogs[0].getSightRadius());
-				window->draw(frogs[0].getdFrogSprite());
+				window->draw(dartFrog);
+				window->draw(dartFrog.getSightRadius());
+				window->draw(dartFrog.getdFrogSprite());
 				break;
 			case NINJA:
-				window->draw(frogs[1]);
-				window->draw(frogs[1].getSightRadius());
-				window->draw(frogs[1].getdFrogSprite());
+				window->draw(ninjaFrog);
+				window->draw(ninjaFrog.getSightRadius());
+				window->draw(ninjaFrog.getdFrogSprite());
 				break;
 			case TACK:
-				window->draw(frogs[2]);
-				window->draw(frogs[2].getSightRadius());
-				window->draw(frogs[2].getdFrogSprite());
+				window->draw(tackFrog);
+				window->draw(tackFrog.getSightRadius());
+				window->draw(tackFrog.getdFrogSprite());
 				break;
 			case WIZARD:
-				window->draw(frogs[3]);
-				window->draw(frogs[3].getSightRadius());
-				window->draw(frogs[3].getdFrogSprite());
+				window->draw(*frogs[3]);
+				window->draw(frogs[3]->getSightRadius());
+				window->draw(frogs[3]->getdFrogSprite());
 				break;
 			}
 		}
@@ -417,16 +448,19 @@ public:
 		for (int x = 0; x < frogs.size() - 4; ++x)
 		{
 			//window->draw(frogs[x + 4].getSightRadius());
-
-			for (int i = 0; i < frogs[x + 4].getProjectiles().size(); ++i)
+			if (x + 4 == currentTower)
 			{
-				if (frogs[x + 4].getProjectiles()[i].isActive())
+				window->draw(frogs[x + 4]->getSightRadius());
+			}
+			for (int i = 0; i < frogs[x + 4]->getProjectiles().size(); ++i)
+			{
+				if (frogs[x + 4]->getProjectiles()[i].isActive())
 				{
-					window->draw(frogs[x + 4].getProjectiles()[i]);
+					window->draw(frogs[x + 4]->getProjectiles()[i]);
 				}
 			}
-			window->draw(frogs[x + 4]);	
-			window->draw(frogs[x + 4].getdFrogSprite());
+			window->draw(*frogs[x + 4]);	
+			window->draw(frogs[x + 4]->getdFrogSprite());
 		}
 
 		if (lives <= 0)
@@ -437,8 +471,6 @@ public:
 			window->draw(black);
 			window->draw(gameOverMessage);
 		}
-
-
 
 		window->display(); // updates the new frame 
 	}
@@ -468,7 +500,11 @@ private:
 	vector<Checkpoint> checkpoints;
 
 	// Towers
-	std::vector<Tower> frogs;
+	std::vector<Tower*> frogs;
+
+	DartFrog dartFrog;
+	NinjaFrog ninjaFrog;
+	TackFrog tackFrog;
 
 	sf::Texture dartFrogTexture;
 	sf::Texture ninjaFrogTexture;
@@ -477,7 +513,8 @@ private:
 	int dartCost = 200,
 		ninjaCost = 350,
 		tackCost = 250,
-		wizardCost = 450;
+		wizardCost = 450,
+	    currentTower = -1;
 
 	towertype towerSelected;
 
@@ -710,20 +747,19 @@ private:
 
 	void initTowers()
 	{
-		Tower dart = Tower(dartFrogTexture, sf::milliseconds(1000), 1, 100.f);
-		dart.getdFrogSprite().setPosition(Vector2f(1000, 1000));
-		frogs.push_back(dart);
+		dartFrog = DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+		dartFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&dartFrog);
 
-		Tower ninja = Tower(ninjaFrogTexture, sf::milliseconds(1000), 1, 100.f);
-		ninja.getdFrogSprite().setPosition(Vector2f(1000, 1000));
-		frogs.push_back(ninja);
+		ninjaFrog = NinjaFrog(ninjaFrogTexture, sf::milliseconds(1500), 1, 200.f);
+		ninjaFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&ninjaFrog);
+		tackFrog = TackFrog(tackFrogTexture, sf::milliseconds(1000), 1, 66.f);
+		tackFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&tackFrog);
 
-		Tower tack = Tower(tackFrogTexture, sf::milliseconds(1000), 1, 100.f);
-		tack.getdFrogSprite().setPosition(Vector2f(1000, 1000));
-		frogs.push_back(tack);
-
-		Tower wizard = Tower(wizardFrogTexture, sf::milliseconds(1000), 1, 100.f);
+		DartFrog wizard = DartFrog(wizardFrogTexture, sf::milliseconds(1000), 1, 100.f);
 		wizard.getdFrogSprite().setPosition(Vector2f(1000, 1000));
-		frogs.push_back(wizard);
+		frogs.push_back(&wizard);
 	}
 };

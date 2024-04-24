@@ -27,7 +27,7 @@ public:
 		sightRadius.setOutlineColor(sf::Color::Blue);
 		sightRadius.setOutlineThickness(3.f);
 		this->setSize(sf::Vector2f(50.f, 50.f));
-		this->setFillColor(sf::Color::Transparent);
+		this->setFillColor(sf::Color::Black);
 		this->setOutlineColor(sf::Color::Transparent);
 		this->setOutlineThickness(1.f);
 		this->setOrigin(getSize().x * .5f, getSize().y * .5f);
@@ -170,13 +170,34 @@ public:
 		return false;
 	}
 
+	bool isMouseOver(sf::RenderWindow& window) // checks to see if the mouse is over the button
+	{
+		float mouseX = sf::Mouse::getPosition(window).x;
+		float mouseY = sf::Mouse::getPosition(window).y;
+
+		float butPosX = this->getPosition().x - 20;
+		float butPosY = this->getPosition().y - 20;
+
+		float butPosWidthX = this->getPosition().x + this->getLocalBounds().width;
+		float butPosHeightY = this->getPosition().y + this->getLocalBounds().height;
+
+		cout << mouseX << ", " << mouseY << endl;
+		cout << butPosX << ", " << butPosX << endl;
+
+		if (mouseX <= butPosWidthX && mouseX >= butPosX && mouseY <= butPosHeightY && mouseY >= butPosY)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	void shootProjectile(float degrees) 
 	{
 		Bubble temp = Bubble(sf::Vector2f(getPosition().x - 20, getPosition().y - 20), degrees);
 		projectiles.push_back(temp);
 	}
 
-	void shoot(vector<Balloon*>& bloons, sf::Texture& bubbleTexture, float& towerDegree)
+	virtual void shoot(vector<Balloon*>& bloons, sf::Texture& bubbleTexture, float& towerDegree) = 0
 	{
 		if (getBloonInSight() != -1 && bloons[getBloonInSight()]->getType() != 0
 			&& checkInRadius(bloons[getBloonInSight()]->getPosition()))
@@ -187,6 +208,7 @@ public:
 			{
 				shootProjectile(towerDegree);
 				getProjectiles()[getProjectiles().size() - 1].setTexture(bubbleTexture);
+
 				setElapsedTimeShoot(sf::milliseconds(0));
 			}
 		}
