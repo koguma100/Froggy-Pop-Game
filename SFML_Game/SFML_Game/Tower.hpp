@@ -58,7 +58,7 @@ public:
 	{
 		return bloonInSight;
 	}
-	sf::CircleShape getSightRadius()
+	sf::CircleShape& getSightRadius()
 	{
 		return sightRadius;
 	}
@@ -88,6 +88,11 @@ public:
 		return projectiles;
 	}
 
+	towertype getType()
+	{
+		return type;
+	}
+
 	// Setters
 
 	void setThrowSpeed(sf::Time newThrowSpeed)
@@ -115,6 +120,11 @@ public:
 	void setElapsedTimeShoot(sf::Time time)
 	{
 		elapsedTimeShoot = time;
+	}
+
+	void setType(towertype type)
+	{
+		this->type = type;
 	}
 
 	// Real Functions
@@ -239,4 +249,5 @@ private:
 	vector<Bubble> projectiles;
 	sf::Sprite dFrog;
 	sf::Texture dFrogTexture;
+	towertype type = DART;
 };

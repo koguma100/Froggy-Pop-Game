@@ -1,9 +1,5 @@
 #include "Balloon.hpp"
 
-enum towertype
-{
-	DART = 1, NINJA = 2, TACK = 3, WIZARD = 4
-};
 class Button : public sf::CircleShape
 {
 public:

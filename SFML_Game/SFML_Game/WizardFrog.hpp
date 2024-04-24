@@ -1,18 +1,18 @@
-#include "Tower.hpp"
+#include "TackFrog.hpp"
 
-class DartFrog : public Tower
+class WizardFrog : public Tower
 {
 public:
-	DartFrog(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
-		float newSightRadius) : Tower(texture, newThrowSpeed, pierce, newSightRadius)
-	{
-		this->getdFrogSprite().setScale(.06, .06);
-		setType(DART);
-	}
-	DartFrog() : Tower()
-	{
+    WizardFrog(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
+        float newSightRadius) :Tower(texture, newThrowSpeed, pierce, newSightRadius) {
+        this->getdFrogSprite().setScale(.06, .06);
+		setType(WIZARD);
+    }
+    WizardFrog() : Tower()
+    {
+        this->getdFrogSprite().setScale(.06, .06);
 
-	}
+    }
 
 	void shoot(vector<Balloon*>& bloons, sf::Texture& bubbleTexture, float& towerDegree)
 	{
@@ -43,5 +43,6 @@ public:
 			}
 		}
 	}
+private:
 
 };

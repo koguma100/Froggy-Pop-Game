@@ -111,7 +111,8 @@ public:
 						if (eco >= wizardCost)
 						{
 							eco -= wizardCost;
-							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							WizardFrog* temp = new WizardFrog(wizardFrogTexture, sf::milliseconds(1000), 1000, 200.f);
+							temp->moveTower(*window, ON);
 							frogs.push_back(temp);
 							control = OFF;
 						}
@@ -169,7 +170,6 @@ public:
 					{
 						if (frogs[i]->isMouseOver(*window))
 						{
-							cout << "POOP" << endl;
 							currentTower = i;
 							towerFound = true;
 						}
@@ -203,10 +203,23 @@ public:
 		switch (round)	// round system
 		{
 		case 1:
-			// 15 red spaced rush
-			if (bloons.size() < 30 && elapsed_time_bloons >= normal_rush_time)
+			// 15 red spaced ruch
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(1, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
@@ -214,22 +227,28 @@ public:
 			{
 				emptyBloons(bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 100;
+				eco += 300;
 				round++;
 				cout << "Round: " << round << endl;
 			}
 			break;
 		case 2:
-			if (bloons.size() < 7 && elapsed_time_bloons >= normal_rush_time)
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
-				spawnBalloon(1, bloons);
+				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
 			// 15 red bloon group rush
-			if ((bloons.size() >= 7 && bloons.size() < 14) && elapsed_time_bloons >= grouped_rush_time)
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
 			{
-				spawnBalloon(1, bloons);
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(3, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
@@ -237,67 +256,33 @@ public:
 			{
 				emptyBloons(bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 130;
+				eco += 400;
 				round++;
 				cout << "Round: " << round << endl;
 			}
 			break;
 		case 3:
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 28) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			if ((bloons.size() >= 28 && bloons.size() < 30) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
-			{
-				emptyBloons(bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 140;
-				round++;
-				cout << "Round: " << round << endl;
-			}
-			break;
-		case 4:
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
-			{
-				emptyBloons(bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 160;
-				round++;
-				cout << "Round: " << round << endl;
-			}
-			break;
-		case 5:
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
 			{
 				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
 			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 28) && elapsed_time_bloons >= grouped_rush_time)
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
 			{
-				spawnBalloon(1, bloons);
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(4, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+			if ((bloons.size() >= 45 && bloons.size() < 60) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(3, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
@@ -305,32 +290,7 @@ public:
 			{
 				emptyBloons(bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 180;
-				round++;
-				cout << "Round: " << round << endl;
-			}
-			break;
-
-		case 6:
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 28) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-
-
-			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
-			{
-				emptyBloons(bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 200;
+				eco += 400;
 				round++;
 				cout << "Round: " << round << endl;
 			}
@@ -357,7 +317,7 @@ public:
 				tackFrog.moveTower(*window, control);
 				break;
 			case WIZARD:
-				frogs[3]->moveTower(*window, control);
+				wizardFrog.moveTower(*window, control);
 				break;
 			default:
 				dartFrog.moveTower(*window, control);
@@ -369,11 +329,18 @@ public:
 
 			for (int x = 0; x < frogs.size() - 4; ++x)
 			{
-				frogs[x + 4]->shoot(bloons, bubbleTexture, towerDegree);
+				if (frogs[x + 4]->getType() == WIZARD)
+				{
+					frogs[x + 4]->shoot(bloons, fireballTexture, towerDegree);
+				}
+				else
+				{
+					frogs[x + 4]->shoot(bloons, bubbleTexture, towerDegree);
+				}
 
 				for (int i = 0; i < frogs[x + 4]->getProjectiles().size(); ++i)
 				{
-					if (!(frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(frogs[x + 4]->getSightRadius().getGlobalBounds())))
+					if (!(frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(frogs[x + 4]->getSightRadius().getGlobalBounds())) && frogs[x + 4]->getType() != WIZARD)
 					{
 						frogs[x + 4]->getProjectiles()[i].setActive(false);
 					}
@@ -408,7 +375,6 @@ public:
 										}
 									}
 								}
-
 							}
 						}
 					}
@@ -463,20 +429,24 @@ public:
 			switch (towerSelected)
 			{
 			case DART:
+				window->draw(dartFrog);
 				window->draw(dartFrog.getSightRadius());
 				window->draw(dartFrog.getdFrogSprite());
 				break;
 			case NINJA:
+				window->draw(ninjaFrog);
 				window->draw(ninjaFrog.getSightRadius());
 				window->draw(ninjaFrog.getdFrogSprite());
 				break;
 			case TACK:
+				window->draw(tackFrog);
 				window->draw(tackFrog.getSightRadius());
 				window->draw(tackFrog.getdFrogSprite());
 				break;
 			case WIZARD:
-				window->draw(frogs[3]->getSightRadius());
-				window->draw(frogs[3]->getdFrogSprite());
+				window->draw(wizardFrog);
+				window->draw(wizardFrog.getSightRadius());
+				window->draw(wizardFrog.getdFrogSprite());
 				break;
 			}
 		}
@@ -495,6 +465,7 @@ public:
 					window->draw(frogs[x + 4]->getProjectiles()[i]);
 				}
 			}
+			window->draw(*frogs[x + 4]);	
 			window->draw(frogs[x + 4]->getdFrogSprite());
 		}
 
@@ -527,6 +498,7 @@ private:
 	vector<Balloon*> bloons;
 	
 	sf::Texture bubbleTexture;
+	sf::Texture fireballTexture;
 
 	// Game Over Text
 	sf::Text gameOverMessage;
@@ -540,6 +512,7 @@ private:
 	DartFrog dartFrog;
 	NinjaFrog ninjaFrog;
 	TackFrog tackFrog;
+	WizardFrog wizardFrog;
 
 	sf::Texture dartFrogTexture;
 	sf::Texture ninjaFrogTexture;
@@ -905,6 +878,11 @@ private:
 			cout << "Bubble.png file not found" << endl;
 		}
 
+		if (!fireballTexture.loadFromFile("Textures/fireball.png"))
+		{
+			cout << "fireball.png not found" << endl;
+		}
+
 		gameOverMessage.setFont(sidemenu.getFont());
 		gameOverMessage.setFillColor(sf::Color::Red);
 		gameOverMessage.setCharacterSize(256);
@@ -927,8 +905,8 @@ private:
 		tackFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
 		frogs.push_back(&tackFrog);
 
-		DartFrog wizard = DartFrog(wizardFrogTexture, sf::milliseconds(1000), 1, 100.f);
-		wizard.getdFrogSprite().setPosition(Vector2f(1000, 1000));
-		frogs.push_back(&wizard);
+		wizardFrog = WizardFrog(wizardFrogTexture, sf::milliseconds(1000), 1000, 200.f);
+		wizardFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&wizardFrog);
 	}
 };

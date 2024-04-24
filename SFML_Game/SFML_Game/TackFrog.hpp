@@ -8,6 +8,8 @@ public:
     TackFrog(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
         float newSightRadius) : Tower(texture, newThrowSpeed, pierce, newSightRadius) {
         this->getdFrogSprite().setScale(.04, .04);
+        setType(TACK);
+
     };
 
     TackFrog() : Tower()
