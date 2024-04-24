@@ -43,7 +43,27 @@ public:
 
 	sf::Text& getTowerlogo();
 
-	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco); 
+	sf::Text& getRound();
+
+	sf::Text& getRoundCount();
+
+	sf::Text& getDartName();
+
+	sf::Text& getNinjaName();
+
+	sf::Text& getTackName();
+
+	sf::Text& getWizardName();
+
+	sf::Text& getDartCost();
+
+	sf::Text& getNinjaCost();
+
+	sf::Text& getTackCost();
+
+	sf::Text& getWizardCost();
+
+	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco, int& RdCount); 
 
  private:
 
@@ -60,5 +80,14 @@ public:
 	 sf::Text livestext;
 	 sf::Text Moneyeco;
 	 sf::Text Towerlogo;
-
+	 sf::Text Round;
+	 sf::Text RoundCount;
+	 sf::Text DartName;
+	 sf::Text NinjaName;
+	 sf::Text TackName;
+	 sf::Text WizardName;
+	 sf::Text DartCost;
+	 sf::Text NinjaCost;
+	 sf::Text TackCost;
+	 sf::Text WizardCost;
 };
