@@ -1,4 +1,4 @@
-#include "TackFrog.hpp"
+#include "WizardFrog.hpp"
 
 class Menu : public sf::RectangleShape
 {

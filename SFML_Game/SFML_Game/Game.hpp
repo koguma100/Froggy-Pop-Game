@@ -111,7 +111,8 @@ public:
 						if (eco >= wizardCost)
 						{
 							eco -= wizardCost;
-							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							WizardFrog* temp = new WizardFrog(wizardFrogTexture, sf::milliseconds(1000), 1000, 200.f);
+							temp->moveTower(*window, ON);
 							frogs.push_back(temp);
 							control = OFF;
 						}
@@ -169,7 +170,6 @@ public:
 					{
 						if (frogs[i]->isMouseOver(*window))
 						{
-							cout << "POOP" << endl;
 							currentTower = i;
 							towerFound = true;
 						}
@@ -317,7 +317,7 @@ public:
 				tackFrog.moveTower(*window, control);
 				break;
 			case WIZARD:
-				frogs[3]->moveTower(*window, control);
+				wizardFrog.moveTower(*window, control);
 				break;
 			default:
 				dartFrog.moveTower(*window, control);
@@ -329,11 +329,18 @@ public:
 
 			for (int x = 0; x < frogs.size() - 4; ++x)
 			{
-				frogs[x + 4]->shoot(bloons, bubbleTexture, towerDegree);
+				if (frogs[x + 4]->getType() == WIZARD)
+				{
+					frogs[x + 4]->shoot(bloons, fireballTexture, towerDegree);
+				}
+				else
+				{
+					frogs[x + 4]->shoot(bloons, bubbleTexture, towerDegree);
+				}
 
 				for (int i = 0; i < frogs[x + 4]->getProjectiles().size(); ++i)
 				{
-					if (!(frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(frogs[x + 4]->getSightRadius().getGlobalBounds())))
+					if (!(frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(frogs[x + 4]->getSightRadius().getGlobalBounds())) && frogs[x + 4]->getType() != WIZARD)
 					{
 						frogs[x + 4]->getProjectiles()[i].setActive(false);
 					}
@@ -368,7 +375,6 @@ public:
 										}
 									}
 								}
-
 							}
 						}
 					}
@@ -438,9 +444,9 @@ public:
 				window->draw(tackFrog.getdFrogSprite());
 				break;
 			case WIZARD:
-				window->draw(*frogs[3]);
-				window->draw(frogs[3]->getSightRadius());
-				window->draw(frogs[3]->getdFrogSprite());
+				window->draw(wizardFrog);
+				window->draw(wizardFrog.getSightRadius());
+				window->draw(wizardFrog.getdFrogSprite());
 				break;
 			}
 		}
@@ -492,6 +498,7 @@ private:
 	vector<Balloon*> bloons;
 	
 	sf::Texture bubbleTexture;
+	sf::Texture fireballTexture;
 
 	// Game Over Text
 	sf::Text gameOverMessage;
@@ -505,6 +512,7 @@ private:
 	DartFrog dartFrog;
 	NinjaFrog ninjaFrog;
 	TackFrog tackFrog;
+	WizardFrog wizardFrog;
 
 	sf::Texture dartFrogTexture;
 	sf::Texture ninjaFrogTexture;
@@ -870,6 +878,11 @@ private:
 			cout << "Bubble.png file not found" << endl;
 		}
 
+		if (!fireballTexture.loadFromFile("Textures/fireball.png"))
+		{
+			cout << "fireball.png not found" << endl;
+		}
+
 		gameOverMessage.setFont(sidemenu.getFont());
 		gameOverMessage.setFillColor(sf::Color::Red);
 		gameOverMessage.setCharacterSize(256);
@@ -892,8 +905,8 @@ private:
 		tackFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
 		frogs.push_back(&tackFrog);
 
-		DartFrog wizard = DartFrog(wizardFrogTexture, sf::milliseconds(1000), 1, 100.f);
-		wizard.getdFrogSprite().setPosition(Vector2f(1000, 1000));
-		frogs.push_back(&wizard);
+		wizardFrog = WizardFrog(wizardFrogTexture, sf::milliseconds(1000), 1000, 200.f);
+		wizardFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&wizardFrog);
 	}
 };

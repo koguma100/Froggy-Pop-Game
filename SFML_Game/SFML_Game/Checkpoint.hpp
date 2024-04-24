@@ -21,6 +21,11 @@ enum direction
 	UP = 1, RIGHT = 2, DOWN = 3, LEFT = 4
 };
 
+enum towertype
+{
+	DART = 1, NINJA = 2, TACK = 3, WIZARD = 4
+};
+
 class Checkpoint : public sf::RectangleShape
 {
 public:
