@@ -463,22 +463,18 @@ public:
 			switch (towerSelected)
 			{
 			case DART:
-				window->draw(dartFrog);
 				window->draw(dartFrog.getSightRadius());
 				window->draw(dartFrog.getdFrogSprite());
 				break;
 			case NINJA:
-				window->draw(ninjaFrog);
 				window->draw(ninjaFrog.getSightRadius());
 				window->draw(ninjaFrog.getdFrogSprite());
 				break;
 			case TACK:
-				window->draw(tackFrog);
 				window->draw(tackFrog.getSightRadius());
 				window->draw(tackFrog.getdFrogSprite());
 				break;
 			case WIZARD:
-				window->draw(*frogs[3]);
 				window->draw(frogs[3]->getSightRadius());
 				window->draw(frogs[3]->getdFrogSprite());
 				break;
@@ -499,7 +495,6 @@ public:
 					window->draw(frogs[x + 4]->getProjectiles()[i]);
 				}
 			}
-			window->draw(*frogs[x + 4]);	
 			window->draw(frogs[x + 4]->getdFrogSprite());
 		}
 
