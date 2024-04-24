@@ -6,7 +6,7 @@ public:
 	DartFrog(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
 		float newSightRadius) : Tower(texture, newThrowSpeed, pierce, newSightRadius)
 	{
-		
+		this->getdFrogSprite().setScale(.06, .06);
 	}
 	DartFrog() : Tower()
 	{
