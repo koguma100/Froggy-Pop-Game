@@ -616,20 +616,20 @@ private:
 	{
 		//Dart
 
-		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(17, 17, 80, 80)))
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(120, 210, 1800, 1710)))
 		{
 			cout << "Dart.png wasn't loaded" << endl;
 		}
 
 		dart.getSprite().setTexture(dartFrogTexture);
 
-		dart.getSprite().setPosition(Vector2f(810, 55));
+		dart.getSprite().setPosition(dart.getPosition());
 
-		dart.getSprite().setScale(1, 1);
+		dart.getSprite().setScale(.045, .046);
 
 		//Ninja
 
-		if (!ninja.getTexture().loadFromFile("Textures/greninja.png", sf::IntRect(10, 10, 80, 80)))
+		if (!ninja.getTexture().loadFromFile("Textures/greninja.png", sf::IntRect(120, 210, 1800, 1710)))
 		{
 			cout << "Image File dart not found" << endl;
 		}
@@ -638,13 +638,13 @@ private:
 
 		ninja.setPosition(Vector2f(830, 150));
 
-		ninja.getSprite().setPosition(Vector2f(820, 120));
+		ninja.getSprite().setPosition(ninja.getPosition());
 
-		ninja.getSprite().setScale(1, 1);
+		ninja.getSprite().setScale(.045, .046);
 
 		//Tack
 
-		if (!tack.getTexture().loadFromFile("Textures/tack.png", sf::IntRect(10, 10, 80, 80)))
+		if (!tack.getTexture().loadFromFile("Textures/tack.png", sf::IntRect(0, 0, 1920, 1920)))
 		{
 			cout << "Image File dart not found" << endl;
 		}
@@ -653,13 +653,13 @@ private:
 
 		tack.setPosition(Vector2f(910, 80));
 
-		tack.getSprite().setPosition(Vector2f(875, 55));
+		tack.getSprite().setPosition(Vector2f(tack.getPosition()));
 
-		tack.getSprite().setScale(1, 1);
+		tack.getSprite().setScale(0.042, 0.042);
 
 		//Wizard
 
-		if (!wizard.getTexture().loadFromFile("Textures/Wizard.png", sf::IntRect(10, 10, 80, 80)))
+		if (!wizard.getTexture().loadFromFile("Textures/Wizard.png", sf::IntRect(120, 210, 1800, 1710)))
 		{
 			cout << "Image File dart not found" << endl;
 		}
@@ -668,9 +668,9 @@ private:
 
 		wizard.setPosition(Vector2f(910, 150));
 
-		wizard.getSprite().setPosition(Vector2f(880, 120));
+		wizard.getSprite().setPosition(wizard.getPosition());
 
-		wizard.getSprite().setScale(1, 1);
+		wizard.getSprite().setScale(.045, .046);
 	}
 
 	void initBackground()
@@ -708,25 +708,25 @@ private:
 	void initTextures()		// includes game over message init
 	{
 		// Dart
-		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(17, 17, 80, 80)))
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(120, 210, 1800, 1710)))
 		{
 			cout << "Dart.png wasn't loaded" << endl;
 		}
 
 		// Ninja
-		if (!ninjaFrogTexture.loadFromFile("Textures/greninja.png", sf::IntRect(10, 10, 80, 80)))
+		if (!ninjaFrogTexture.loadFromFile("Textures/greninja.png", sf::IntRect(120, 210, 1800, 1710)))
 		{
 			cout << "Image File dart not found" << endl;
 		}
 
 		// Tack
-		if (!tackFrogTexture.loadFromFile("Textures/tack.png", sf::IntRect(10, 10, 80, 80)))
+		if (!tackFrogTexture.loadFromFile("Textures/tack.png", sf::IntRect(0, 0, 1920, 1920)))
 		{
 			cout << "Image File dart not found" << endl;
 		}
 
 		// Wizard
-		if (!wizardFrogTexture.loadFromFile("Textures/Wizard.png", sf::IntRect(10, 10, 80, 80)))
+		if (!wizardFrogTexture.loadFromFile("Textures/Wizard.png", sf::IntRect(120, 210, 1800, 1710)))
 		{
 			cout << "Image File dart not found" << endl;
 		}
