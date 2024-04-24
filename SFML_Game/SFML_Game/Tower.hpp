@@ -144,7 +144,7 @@ public:
 
 		this->setRotation(rotateDeg);
 
-		this->dFrog.setRotation(rotateDeg - 180);
+		this->dFrog.setRotation(rotateDeg);
 
 		return rotateDeg;
 	}
