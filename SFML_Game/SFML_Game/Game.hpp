@@ -435,7 +435,7 @@ public:
 		window->draw(background);
 
 		// draw menu
-		sidemenu.drawmenu(window, lives, eco);
+		sidemenu.drawmenu(window, lives, eco, round);
 
 		dart.drawbutton(window);
 
@@ -605,7 +605,7 @@ private:
 
 		sidemenu.getSprite().setPosition(Vector2f(15, 15));
 
-		sidemenu.getSprite().setScale(.5, .5);
+		sidemenu.getSprite().setScale(1, 1);
 
 		//Money Picutre
 
@@ -616,9 +616,9 @@ private:
 
 		sidemenu.getGold().setTexture(sidemenu.getCoins());
 
-		sidemenu.getGold().setPosition(Vector2f(105, 15));
+		sidemenu.getGold().setPosition(Vector2f(165, 15));
 
-		sidemenu.getGold().setScale(.5, .5);
+		sidemenu.getGold().setScale(1, 1);
 
 
 		//Lives Text
@@ -632,11 +632,11 @@ private:
 
 		sidemenu.getLivesText().setString("299");
 
-		sidemenu.getLivesText().setCharacterSize(24);
+		sidemenu.getLivesText().setCharacterSize(36);
 
 		sidemenu.getLivesText().setFillColor(sf::Color::White);
 
-		sidemenu.getLivesText().setPosition(Vector2f(55, 15));
+		sidemenu.getLivesText().setPosition(Vector2f(100, 25));
 
 		//Coin Text
 
@@ -644,13 +644,146 @@ private:
 
 		sidemenu.getMoneyeco().setString("499");
 
-		sidemenu.getMoneyeco().setCharacterSize(24);
+		sidemenu.getMoneyeco().setCharacterSize(36);
 
 		sidemenu.getMoneyeco().setFillColor(sf::Color::White);
 
-		sidemenu.getMoneyeco().setPosition(Vector2f(145, 15));
+		sidemenu.getMoneyeco().setPosition(Vector2f(260, 25));
 
+		//Tower Text
+
+		sidemenu.getTowerlogo().setFont(sidemenu.getFont());
+
+		sidemenu.getTowerlogo().setString("Towers");
+
+		sidemenu.getTowerlogo().setCharacterSize(64);
+
+		sidemenu.getTowerlogo().setFillColor(sf::Color::Magenta);
+
+		sidemenu.getTowerlogo().setPosition(Vector2f(1555, 15));
+
+		//Round
+
+		sidemenu.getRound().setFont(sidemenu.getFont());
+
+		sidemenu.getRound().setString("Round");
+
+		sidemenu.getRound().setCharacterSize(48);
+
+		sidemenu.getRound().setFillColor(sf::Color::White);
+
+		sidemenu.getRound().setPosition(Vector2f(1300, 25));
+
+		//Round Count
+
+		sidemenu.getRoundCount().setFont(sidemenu.getFont());
+
+		sidemenu.getRoundCount().setString("1");
+
+		sidemenu.getRoundCount().setCharacterSize(36);
+
+		sidemenu.getRoundCount().setFillColor(sf::Color::White);
+
+		sidemenu.getRoundCount().setPosition(Vector2f(1360, 100));
+
+		//Dart name
+
+		sidemenu.getDartName().setFont(sidemenu.getFont());
+
+		sidemenu.getDartName().setString("Dart Frog");
+
+		sidemenu.getDartName().setCharacterSize(24);
+
+		sidemenu.getDartName().setFillColor(sf::Color::Green);
+
+		sidemenu.getDartName().setPosition(Vector2f(1540, 110));
+
+		//Dart Cost
+
+		sidemenu.getDartCost().setFont(sidemenu.getFont());
+
+		sidemenu.getDartCost().setString("200");
+
+		sidemenu.getDartCost().setCharacterSize(24);
+
+		sidemenu.getDartCost().setFillColor(sf::Color::Green);
+
+		sidemenu.getDartCost().setPosition(Vector2f(1570, 300));
+
+		//Ninja Name
+
+		sidemenu.getNinjaName().setFont(sidemenu.getFont());
+
+		sidemenu.getNinjaName().setString("Ninja Frog");
+
+		sidemenu.getNinjaName().setCharacterSize(24);
+
+		sidemenu.getNinjaName().setFillColor(sf::Color::Green);
+
+		sidemenu.getNinjaName().setPosition(Vector2f(1540, 345));
+
+		//Ninja Cost
+
+		sidemenu.getNinjaCost().setFont(sidemenu.getFont());
+
+		sidemenu.getNinjaCost().setString("350");
+
+		sidemenu.getNinjaCost().setCharacterSize(24);
+
+		sidemenu.getNinjaCost().setFillColor(sf::Color::Green);
+
+		sidemenu.getNinjaCost().setPosition(Vector2f(1573, 530));
+
+		//Tack Name
+
+		sidemenu.getTackName().setFont(sidemenu.getFont());
+
+		sidemenu.getTackName().setString("Frog Army");
+
+		sidemenu.getTackName().setCharacterSize(24);
+
+		sidemenu.getTackName().setFillColor(sf::Color::Green);
+
+		sidemenu.getTackName().setPosition(Vector2f(1680, 110));
+
+		//Tack Cost
+
+		sidemenu.getTackCost().setFont(sidemenu.getFont());
+
+		sidemenu.getTackCost().setString("250");
+
+		sidemenu.getTackCost().setCharacterSize(24);
+
+		sidemenu.getTackCost().setFillColor(sf::Color::Green);
+
+		sidemenu.getTackCost().setPosition(Vector2f(1710, 300));
+
+		//Wizard Name
+
+		sidemenu.getWizardName().setFont(sidemenu.getFont());
+
+		sidemenu.getWizardName().setString("Wizard Frog");
+
+		sidemenu.getWizardName().setCharacterSize(24);
+
+		sidemenu.getWizardName().setFillColor(sf::Color::Green);
+
+		sidemenu.getWizardName().setPosition(Vector2f(1660, 345));
+
+		//Wizard Cost
+
+		sidemenu.getWizardCost().setFont(sidemenu.getFont());
+
+		sidemenu.getWizardCost().setString("450");
+
+		sidemenu.getWizardCost().setCharacterSize(24);
+
+		sidemenu.getWizardCost().setFillColor(sf::Color::Green);
+
+		sidemenu.getWizardCost().setPosition(Vector2f(1710, 530));
 	}
+
+
 
 	void initbutton()
 	{
@@ -663,9 +796,10 @@ private:
 
 		dart.getSprite().setTexture(dartFrogTexture);
 
+		dart.setPosition(Vector2f(1545, 180));
 		dart.getSprite().setPosition(dart.getPosition());
 
-		dart.getSprite().setScale(.045, .046);
+		dart.getSprite().setScale(.06, .06);
 
 		//Ninja
 
@@ -676,11 +810,11 @@ private:
 
 		ninja.getSprite().setTexture(ninja.getTexture());
 
-		ninja.setPosition(Vector2f(830, 150));
+		ninja.setPosition(Vector2f(1545, 395));
 
 		ninja.getSprite().setPosition(ninja.getPosition());
 
-		ninja.getSprite().setScale(.045, .046);
+		ninja.getSprite().setScale(.06, .06);
 
 		//Tack
 
@@ -691,11 +825,11 @@ private:
 
 		tack.getSprite().setTexture(tack.getTexture());
 
-		tack.setPosition(Vector2f(910, 80));
+		tack.setPosition(Vector2f(1680, 180));
 
 		tack.getSprite().setPosition(Vector2f(tack.getPosition()));
 
-		tack.getSprite().setScale(0.042, 0.042);
+		tack.getSprite().setScale(0.055, 0.055);
 
 		//Wizard
 
@@ -706,11 +840,11 @@ private:
 
 		wizard.getSprite().setTexture(wizard.getTexture());
 
-		wizard.setPosition(Vector2f(910, 150));
+		wizard.setPosition(Vector2f(1680, 395));
 
 		wizard.getSprite().setPosition(wizard.getPosition());
 
-		wizard.getSprite().setScale(.045, .046);
+		wizard.getSprite().setScale(.06, .06);
 	}
 
 	void initBackground()
