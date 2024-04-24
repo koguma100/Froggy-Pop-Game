@@ -6,8 +6,11 @@ public:
 	Balloon(int type = 1, float size = 20, const sf::Vector2f& pos = sf::Vector2f(0, 0)) : CircleShape(size) {
         switch (type)
         {
+        case 0:
+            color = sf::Color::Transparent;
+            speed = 10;
+            break;
         case 1:
-
             color = sf::Color::Red;
             speed = 1;
             break;
@@ -18,6 +21,14 @@ public:
         case 3:
             color = sf::Color::Green;
             speed = 1.50;
+            break;
+        case 4:
+            color = sf::Color::Yellow;
+            speed = 1.75;
+            break; 
+        case 5:
+            color = sf::Color::Magenta;
+            speed = 2;
             break;
         default:
             color = sf::Color::Red;
@@ -37,11 +48,15 @@ public:
 
 	void setType(int type);
 
+    void setDirection(direction direct);
+
     bool getReachedEnd() const;
 
     void setReachedEnd(bool reachedEnd);
 
     void moveBalloon(const vector<Checkpoint>& checkpoints, int& lives, int& eco);
+
+    void bloonPop();
 
 private:
 	int type;

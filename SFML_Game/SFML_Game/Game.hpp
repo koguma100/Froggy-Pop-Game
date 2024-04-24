@@ -12,13 +12,17 @@ public:
 		initBackground();
 		initBalloons();
 		initCheckpoints();
+		initTextures();
 		initTowers();
 		initmenu();
+		initbutton();
 		lives = 100;
 		eco = 500;
 		numOfBloons = 0;
 		round = 1;
-		elapsed_time = clock.getElapsedTime();
+		towerSelected = DART;
+
+		elapsed_time_bloons = sf::milliseconds(0);
 	}
 	~Game()
 	{
@@ -55,8 +59,6 @@ public:
 				{
 					window->close();
 				}
-
-
 				if (ev.key.code == sf::Keyboard::O) // changing control
 				{
 					if (control == ON)
@@ -73,16 +75,111 @@ public:
 			case sf::Event::MouseButtonPressed:
 				if (ev.mouseButton.button == sf::Mouse::Left && control == ON)
 				{
-					Tower copyFrog = frogs[0];
-					frogs.push_back(copyFrog);
-					control = OFF;
+					switch (towerSelected)
+					{
+					case DART:
+						if (eco >= dartCost)
+						{
+							eco -= dartCost;
+							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
+							control = OFF;
+						}
+						break;
+					case NINJA:
+						if (eco >= ninjaCost)
+						{
+							eco -= ninjaCost;
+							NinjaFrog* temp = new NinjaFrog(ninjaFrogTexture, sf::milliseconds(1500), 1, 200.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
+							control = OFF;
+						}
+						break;
+					case TACK:
+						if (eco >= tackCost)
+						{
+							eco -= tackCost;
+							TackFrog* temp = new TackFrog(tackFrogTexture, sf::milliseconds(2000), 2, 66.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
+							control = OFF;
+						}
+						break;
+					case WIZARD:
+						if (eco >= wizardCost)
+						{
+							eco -= wizardCost;
+							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							frogs.push_back(temp);
+							control = OFF;
+						}
+						break;
+					default:
+						if (eco >= dartCost)
+						{
+							eco -= dartCost;
+							DartFrog* temp = new DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+							temp->moveTower(*window, ON);
+							frogs.push_back(temp);
+							control = OFF;
+						}
+						break;
+					}
+					
 				}
 
-
-				if (but1.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				if (dart.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
 				{
-					control = ON;
+					if (eco >= dartCost)
+					{
+						control = ON;	
+					}	
+					towerSelected = DART;
 				}
+				else if (ninja.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					if (eco >= ninjaCost)
+					{
+						control = ON;
+					}
+					towerSelected = NINJA;
+				}
+				else if (tack.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					if (eco >= tackCost)
+					{
+						control = ON;
+					}
+					towerSelected = TACK;
+				}
+				else if (wizard.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					if (eco >= wizardCost)
+					{
+						control = ON;
+					}
+					towerSelected = WIZARD;
+				}
+				if (ev.mouseButton.button == sf::Mouse::Left && control == OFF)
+				{
+					bool towerFound = false;
+					for (int i = 4; i < frogs.size() && !towerFound; ++i)
+					{
+						if (frogs[i]->isMouseOver(*window))
+						{
+							cout << "POOP" << endl;
+							currentTower = i;
+							towerFound = true;
+						}
+					}
+					if (!towerFound)
+					{
+						currentTower = -1;
+					}
+				}
+
 				break;
 			}
 		}
@@ -94,76 +191,193 @@ public:
 
 		pollEvents();
 		
-		elapsed_time += clock.restart();
-
-		if (round == 1)	// will probably make a round function to make update less cluttered
+		sf::Time tempInterval = clock.restart();
+		elapsed_time_bloons += tempInterval;
+		for (int i = 0; i < frogs.size() - 1; ++i)
 		{
+			frogs[i + 1]->setElapsedTimeShoot(frogs[i + 1]->getElapsedTimeShoot() + tempInterval);
+		}
+
+		//+++++++++++++++++++++++++++++++++START OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
+
+		switch (round)	// round system
+		{
+		case 1:
 			// 15 red spaced ruch
-			if (numOfBloons < 15 && elapsed_time >= normal_rush_time)
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(1, bloons);
-				numOfBloons++;
-				elapsed_time = sf::milliseconds(0);
+				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
 			// 15 red bloon group rush
-
-			if ((numOfBloons >= 15 && numOfBloons < 30) && elapsed_time >= grouped_rush_time)
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
 			{
 				spawnBalloon(1, bloons);
-				numOfBloons++;
-				elapsed_time = sf::milliseconds(0);
+				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
-			if ((numOfBloons >= 30 && numOfBloons < 45) && elapsed_time >= normal_rush_time)
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
 			{
 				spawnBalloon(2, bloons);
-				numOfBloons++;
-				elapsed_time = sf::milliseconds(0);
+				elapsed_time_bloons = sf::milliseconds(0);
 			}
 
-			if (roundEnded(bloons))
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
 			{
 				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 300;
+				round++;
+				cout << "Round: " << round << endl;
 			}
+			break;
+		case 2:
+			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 400;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
+		case 3:
+			if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(2, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			// 15 red bloon group rush
+			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+			{
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(4, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+			if ((bloons.size() >= 45 && bloons.size() < 60) && elapsed_time_bloons >= normal_rush_time)
+			{
+				spawnBalloon(3, bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+			}
+
+			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+			{
+				emptyBloons(bloons);
+				elapsed_time_bloons = sf::milliseconds(0);
+				eco += 400;
+				round++;
+				cout << "Round: " << round << endl;
+			}
+			break;
 		}
-		// basic 15 bloon normal rush
-		
-		
-		balloonMovement();
+
+		//+++++++++++++++++++++++++++++++++END OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 		
 		// frog updates
 		// track mouse
-		frogs[0].moveTower(*window, control);
-
-		for (int x = 0; x < frogs.size() - 1; ++x)
+		if (!roundEnded(bloons))
 		{
+			balloonMovement();
 
-			if (frogs[x + 1].getBloonInSight() != -1 && bloons[frogs[x + 1].getBloonInSight()]->getType() != 0
-				&& frogs[x + 1].checkInRadius(bloons[frogs[x + 1].getBloonInSight()]->getPosition()))
+			switch (towerSelected)
 			{
-				frogs[x + 1].findRotateDeg(bloons[frogs[x + 1].getBloonInSight()]->getPosition());
-			} 
-			else
+			case DART:
+				dartFrog.moveTower(*window, control);
+				break;
+			case NINJA:
+				ninjaFrog.moveTower(*window, control);
+				break;
+			case TACK:
+				tackFrog.moveTower(*window, control);
+				break;
+			case WIZARD:
+				frogs[3]->moveTower(*window, control);
+				break;
+			default:
+				dartFrog.moveTower(*window, control);
+				break;
+			}
+
+			bool validBloon = true;
+			float towerDegree = 0.0;
+
+			for (int x = 0; x < frogs.size() - 4; ++x)
 			{
-				frogs[x + 1].setBloonInSight(-1);
-				bool bloonFound = false;
-				for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+				frogs[x + 4]->shoot(bloons, bubbleTexture, towerDegree);
+
+				for (int i = 0; i < frogs[x + 4]->getProjectiles().size(); ++i)
 				{
-					if (frogs[x + 1].checkInRadius(bloons[i]->getPosition()))
+					if (!(frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(frogs[x + 4]->getSightRadius().getGlobalBounds())))
 					{
-						bloonFound = true;
-						frogs[x + 1].setBloonInSight(i);
-						frogs[x + 1].findRotateDeg(bloons[i]->getPosition());
+						frogs[x + 4]->getProjectiles()[i].setActive(false);
 					}
+					else
+					{
+						if (frogs[x + 4]->getProjectiles()[i].isActive())
+						{
+							for (int bloonIndex = 0; bloonIndex < bloons.size(); ++bloonIndex)
+							{
+								if (frogs[x + 4]->getProjectiles()[i].getBloonsPopped().size() >= frogs[x + 4]->getPierce())	// change for penetration difference
+								{
+									frogs[x + 4]->getProjectiles()[i].setActive(false);
+								}
+								else
+								{
+									if (frogs[x + 4]->getProjectiles()[i].getGlobalBounds().intersects(bloons[bloonIndex]->getGlobalBounds()))
+									{
+										validBloon = true;
+
+										for (int k = 0; k < frogs[x + 4]->getProjectiles()[i].getBloonsPopped().size(); k++)
+										{
+											if (frogs[x + 4]->getProjectiles()[i].getBloonsPopped()[k] == bloonIndex)
+											{
+												validBloon = false;
+											}
+										}
+										if (validBloon)
+										{
+											bloons[bloonIndex]->bloonPop();
+											eco++;
+											frogs[x + 4]->getProjectiles()[i].bloonHit(bloonIndex);
+										}
+									}
+								}
+
+							}
+						}
+					}
+					
+					frogs[x + 4]->getProjectiles()[i].move_bubble();
 				}
 			}
-			if (bloons.size() > 0 && frogs[x + 1].checkInRadius(bloons[0]->getPosition()))
-			{
-				frogs[x + 1].findRotateDeg(bloons[0]->getPosition());
-			}
 		}
-
+		
 	}
 	void render() // graphics
 	{
@@ -180,7 +394,16 @@ public:
 		// Draw Game // 
 		window->draw(background);
 
-		
+		// draw menu
+		sidemenu.drawmenu(window, lives, eco);
+
+		dart.drawbutton(window);
+
+		ninja.drawbutton(window);
+
+		tack.drawbutton(window);
+
+		wizard.drawbutton(window);
 
 		// draw balloons
 		for (int i = 0; i < checkpoints.size(); ++i)
@@ -196,17 +419,58 @@ public:
 
 		// draw towers
 		if (control == ON)
-			window->draw(frogs[0]);
-		for (int x = 0; x < frogs.size() - 1; ++x)
 		{
-			window->draw(frogs[x + 1].getSightRadius());
-			window->draw(frogs[x + 1]);
+			switch (towerSelected)
+			{
+			case DART:
+				window->draw(dartFrog);
+				window->draw(dartFrog.getSightRadius());
+				window->draw(dartFrog.getdFrogSprite());
+				break;
+			case NINJA:
+				window->draw(ninjaFrog);
+				window->draw(ninjaFrog.getSightRadius());
+				window->draw(ninjaFrog.getdFrogSprite());
+				break;
+			case TACK:
+				window->draw(tackFrog);
+				window->draw(tackFrog.getSightRadius());
+				window->draw(tackFrog.getdFrogSprite());
+				break;
+			case WIZARD:
+				window->draw(*frogs[3]);
+				window->draw(frogs[3]->getSightRadius());
+				window->draw(frogs[3]->getdFrogSprite());
+				break;
+			}
+		}
+			
+		for (int x = 0; x < frogs.size() - 4; ++x)
+		{
+			//window->draw(frogs[x + 4].getSightRadius());
+			if (x + 4 == currentTower)
+			{
+				window->draw(frogs[x + 4]->getSightRadius());
+			}
+			for (int i = 0; i < frogs[x + 4]->getProjectiles().size(); ++i)
+			{
+				if (frogs[x + 4]->getProjectiles()[i].isActive())
+				{
+					window->draw(frogs[x + 4]->getProjectiles()[i]);
+				}
+			}
+			window->draw(*frogs[x + 4]);	
+			window->draw(frogs[x + 4]->getdFrogSprite());
 		}
 
-		window->draw(but1);
-
-		// draw menu
-		sidemenu.drawmenu(window, lives, eco);
+		if (lives <= 0)
+		{
+			sf::RectangleShape black = sf::RectangleShape(Vector2f(1600, 340));
+			black.setFillColor(sf::Color::Black);
+			black.setPosition(100, 300);
+			window->draw(black);
+			window->draw(gameOverMessage);
+		}
 
 		window->display(); // updates the new frame 
 	}
@@ -222,19 +486,46 @@ private:
 
 	// Game Time 
 	sf::Clock clock;
-	sf::Time elapsed_time;
+	sf::Time elapsed_time_bloons;
 
 	// Game Objects
 	vector<Balloon*> bloons;
+	
+	sf::Texture bubbleTexture;
+
+	// Game Over Text
+	sf::Text gameOverMessage;
 
 	// Checkpoints
 	vector<Checkpoint> checkpoints;
 
 	// Towers
-	std::vector<Tower> frogs;
-	control control = ON;
+	std::vector<Tower*> frogs;
+
+	DartFrog dartFrog;
+	NinjaFrog ninjaFrog;
+	TackFrog tackFrog;
+
+	sf::Texture dartFrogTexture;
+	sf::Texture ninjaFrogTexture;
+	sf::Texture tackFrogTexture;
+	sf::Texture wizardFrogTexture;
+	int dartCost = 200,
+		ninjaCost = 350,
+		tackCost = 250,
+		wizardCost = 450,
+	    currentTower = -1;
+
+	towertype towerSelected;
+
+	// Buttons
+	control control = OFF;
 
 	Button but1;
+	Button dart;
+	Button ninja;
+	Button tack;
+	Button wizard;
 
 	// Map
 	sf::Texture backgroundTexture;
@@ -250,8 +541,8 @@ private:
 	}
 	void initWindow()
 	{
-		videoMode.height = 525;
-		videoMode.width = 950; //825
+		videoMode.height = 900;
+		videoMode.width = 1800; //825
 
 		window = new sf::RenderWindow(videoMode, "Project F");
 
@@ -261,7 +552,7 @@ private:
 
 	void initmenu()
 	{
-		sidemenu = Menu(Vector2f(825, 0), Vector2f(200, 525));
+		sidemenu = Menu(Vector2f(1525, 0), Vector2f(375, 900));
 
 		//Heart Picture
 
@@ -321,6 +612,67 @@ private:
 
 	}
 
+	void initbutton()
+	{
+		//Dart
+
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(120, 210, 1800, 1710)))
+		{
+			cout << "Dart.png wasn't loaded" << endl;
+		}
+
+		dart.getSprite().setTexture(dartFrogTexture);
+
+		dart.getSprite().setPosition(dart.getPosition());
+
+		dart.getSprite().setScale(.045, .046);
+
+		//Ninja
+
+		if (!ninja.getTexture().loadFromFile("Textures/greninja.png", sf::IntRect(120, 210, 1800, 1710)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		ninja.getSprite().setTexture(ninja.getTexture());
+
+		ninja.setPosition(Vector2f(830, 150));
+
+		ninja.getSprite().setPosition(ninja.getPosition());
+
+		ninja.getSprite().setScale(.045, .046);
+
+		//Tack
+
+		if (!tack.getTexture().loadFromFile("Textures/tack.png", sf::IntRect(0, 0, 1920, 1920)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		tack.getSprite().setTexture(tack.getTexture());
+
+		tack.setPosition(Vector2f(910, 80));
+
+		tack.getSprite().setPosition(Vector2f(tack.getPosition()));
+
+		tack.getSprite().setScale(0.042, 0.042);
+
+		//Wizard
+
+		if (!wizard.getTexture().loadFromFile("Textures/Wizard.png", sf::IntRect(120, 210, 1800, 1710)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		wizard.getSprite().setTexture(wizard.getTexture());
+
+		wizard.setPosition(Vector2f(910, 150));
+
+		wizard.getSprite().setPosition(wizard.getPosition());
+
+		wizard.getSprite().setScale(.045, .046);
+	}
+
 	void initBackground()
 	{
 		if (!backgroundTexture.loadFromFile("Textures/MonkeyMeadow.png"))
@@ -329,6 +681,7 @@ private:
 		}
 
 		background.setTexture(backgroundTexture);
+		background.setScale(1.85f, 1.70f);
 	}
 
 	void initBalloons()
@@ -338,22 +691,75 @@ private:
 
 	void initCheckpoints()
 	{
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(430, 200)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(400, 50)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(220, 80)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(240, 445)));
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(90, 410)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(770, 350)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(720, 125)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(460, 140)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(480, 740)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(210, 710)));
 
-		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(130, 260)));
-		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(540, 300)));
-		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(500, 140)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(640, 170)));
-		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(610, 400)));
-		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(325, 370)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(230, 475)));
+		checkpoints.push_back(Checkpoint(UP, Vector2f(30, 30), Vector2f(975, 500)));
+		checkpoints.push_back(Checkpoint(RIGHT, Vector2f(30, 30), Vector2f(940, 255)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(1170, 300)));
+		checkpoints.push_back(Checkpoint(LEFT, Vector2f(30, 30), Vector2f(1140, 670)));
+		checkpoints.push_back(Checkpoint(DOWN, Vector2f(30, 30), Vector2f(630, 640)));
 	}
+
+	void initTextures()		// includes game over message init
+	{
+		// Dart
+		if (!dartFrogTexture.loadFromFile("Textures/dart.png", sf::IntRect(120, 210, 1800, 1710)))
+		{
+			cout << "Dart.png wasn't loaded" << endl;
+		}
+
+		// Ninja
+		if (!ninjaFrogTexture.loadFromFile("Textures/greninja.png", sf::IntRect(120, 210, 1800, 1710)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		// Tack
+		if (!tackFrogTexture.loadFromFile("Textures/tack.png", sf::IntRect(0, 0, 1920, 1920)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		// Wizard
+		if (!wizardFrogTexture.loadFromFile("Textures/Wizard.png", sf::IntRect(120, 210, 1800, 1710)))
+		{
+			cout << "Image File dart not found" << endl;
+		}
+
+		if (!bubbleTexture.loadFromFile("Textures/bubble.png"))
+		{
+			cout << "Bubble.png file not found" << endl;
+		}
+
+		gameOverMessage.setFont(sidemenu.getFont());
+		gameOverMessage.setFillColor(sf::Color::Red);
+		gameOverMessage.setCharacterSize(256);
+		gameOverMessage.setPosition(200, 300);
+		gameOverMessage.setStyle(sf::Text::Bold);
+		gameOverMessage.setString("Game Over!");
+
+	}
+
 	void initTowers()
 	{
-		Tower frog = Tower(sf::Color::Black, 3, 1, 100.f);
-		frogs.push_back(frog);
+		dartFrog = DartFrog(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
+		dartFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&dartFrog);
+
+		ninjaFrog = NinjaFrog(ninjaFrogTexture, sf::milliseconds(1500), 1, 200.f);
+		ninjaFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&ninjaFrog);
+		tackFrog = TackFrog(tackFrogTexture, sf::milliseconds(1000), 1, 66.f);
+		tackFrog.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&tackFrog);
+
+		DartFrog wizard = DartFrog(wizardFrogTexture, sf::milliseconds(1000), 1, 100.f);
+		wizard.getdFrogSprite().setPosition(Vector2f(1000, 1000));
+		frogs.push_back(&wizard);
 	}
 };

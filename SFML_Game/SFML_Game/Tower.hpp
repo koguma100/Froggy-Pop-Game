@@ -12,28 +12,30 @@ enum control
 class Tower : public sf::RectangleShape
 {
 public:
-	Tower(const sf::Color& newSprite, double newThrowSpeed, int newThrowAmount,
+	Tower(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
 		float newSightRadius)
 	{
-		sprite = newSprite;
-		//projectile = newProjectile;
+		dFrogTexture = texture;
+		dFrog.setTexture(texture);
 		throwSpeed = newThrowSpeed;
-		throwAmount = newThrowAmount;
+		this->pierce = pierce;
+		shooting = false;
 		bloonInSight = -1;
+		elapsedTimeShoot = sf::milliseconds(0);
 		sightRadius.setRadius(newSightRadius);
 		sightRadius.setFillColor(sf::Color::Transparent);
 		sightRadius.setOutlineColor(sf::Color::Blue);
 		sightRadius.setOutlineThickness(3.f);
 		this->setSize(sf::Vector2f(50.f, 50.f));
-		this->setFillColor(sf::Color::Black);
-		this->setOutlineColor(sf::Color::Black);
+		this->setFillColor(sf::Color::Transparent);
+		this->setOutlineColor(sf::Color::Transparent);
 		this->setOutlineThickness(1.f);
 		this->setOrigin(getSize().x * .5f, getSize().y * .5f);
 		sightRadius.setOrigin(sightRadius.getRadius(), sightRadius.getRadius());
+		dFrog.setOrigin(dFrog.getTexture()->getSize().x * .5f, dFrog.getTexture()->getSize().y * .5f);
 	}
 	Tower()
 	{
-		sprite = sf::Color::Black;
 		this->setSize(sf::Vector2f(50.f, 50.f));
 		sightRadius.setRadius(50.f);
 		sightRadius.setFillColor(sf::Color::White);
@@ -44,21 +46,13 @@ public:
 	}
 
 	// getters
-	sf::Color getSprite()
-	{
-		return sprite;
-	}
-	//Projectile getProjectile()
-	//{
-	//	return projectile;
-	//}
-	double getThrowSpeed()
+	sf::Time getThrowSpeed()
 	{
 		return throwSpeed;
 	}
-	int getThrowAmount()
+	int getPierce()
 	{
-		return throwAmount;
+		return pierce;
 	}
 	int getBloonInSight()
 	{
@@ -69,22 +63,40 @@ public:
 		return sightRadius;
 	}
 
-	// Setters
-	void setSprite(sf::Color newSprite)
+	sf::Sprite& getdFrogSprite()
 	{
-		sprite = newSprite;
+		return dFrog;
 	}
-	//void setProjectile(Projectile newProjectile)
-	//{
-	//	projectile = newProjectile;
-	//}
-	void setThrowSpeed(double newThrowSpeed)
+
+	sf::Texture& getdFrogTexture()
+	{
+		return dFrogTexture;
+	}
+
+	bool getShooting()
+	{
+		return shooting;
+	}
+
+	sf::Time getElapsedTimeShoot()
+	{
+		return elapsedTimeShoot;
+	}
+
+	vector<Bubble>& getProjectiles()
+	{
+		return projectiles;
+	}
+
+	// Setters
+
+	void setThrowSpeed(sf::Time newThrowSpeed)
 	{
 		throwSpeed = newThrowSpeed;
 	}
-	void setThrowAmount(int newThrowAmount)
+	void setThrowAmount(int pierce)
 	{
-		throwAmount = newThrowAmount;
+		this->pierce = pierce;
 	}
 	void setBloonInSight(int bloonIndex)
 	{
@@ -95,6 +107,15 @@ public:
 		sightRadius = newSightRadius;
 	}
 
+	void setShooting(bool mode)
+	{
+		shooting = true;
+	}
+
+	void setElapsedTimeShoot(sf::Time time)
+	{
+		elapsedTimeShoot = time;
+	}
 
 	// Real Functions
 	void moveTower(sf::RenderWindow& window, control control) // links the tower with the current mouse position
@@ -103,10 +124,16 @@ public:
 		{
 			this->setPosition(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
 			sightRadius.setPosition(this->getPosition());
+			dFrog.setPosition(getPosition());
+		}
+		else
+		{
+			setPosition(Vector2f(2000, 110));
+			dFrog.setPosition(getPosition());
 		}
 	}
 
-	void findRotateDeg(sf::Vector2f coordinates)
+	float findRotateDeg(sf::Vector2f coordinates)
 	{
 		float tpx = (this->getPosition().x - coordinates.x);
 		float tpy = (this->getPosition().y - coordinates.y);
@@ -116,6 +143,10 @@ public:
 		float rotateDeg = rotateRad * (180 / PI);
 
 		this->setRotation(rotateDeg);
+
+		this->dFrog.setRotation(rotateDeg - 180);
+
+		return rotateDeg;
 	}
 
 	bool checkInRadius(sf::Vector2f coordinates)
@@ -139,11 +170,73 @@ public:
 		return false;
 	}
 
+	bool isMouseOver(sf::RenderWindow& window) // checks to see if the mouse is over the button
+	{
+		float mouseX = sf::Mouse::getPosition(window).x;
+		float mouseY = sf::Mouse::getPosition(window).y;
+
+		float butPosX = this->getPosition().x - 20;
+		float butPosY = this->getPosition().y - 20;
+
+		float butPosWidthX = this->getPosition().x + this->getLocalBounds().width;
+		float butPosHeightY = this->getPosition().y + this->getLocalBounds().height;
+
+		cout << mouseX << ", " << mouseY << endl;
+		cout << butPosX << ", " << butPosX << endl;
+
+		if (mouseX <= butPosWidthX && mouseX >= butPosX && mouseY <= butPosHeightY && mouseY >= butPosY)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	void shootProjectile(float degrees) 
+	{
+		Bubble temp = Bubble(sf::Vector2f(getPosition().x - 20, getPosition().y - 20), degrees);
+		projectiles.push_back(temp);
+	}
+
+	virtual void shoot(vector<Balloon*>& bloons, sf::Texture& bubbleTexture, float& towerDegree) = 0
+	{
+		if (getBloonInSight() != -1 && bloons[getBloonInSight()]->getType() != 0
+			&& checkInRadius(bloons[getBloonInSight()]->getPosition()))
+		{
+			towerDegree = findRotateDeg(bloons[getBloonInSight()]->getPosition());
+
+			if (getElapsedTimeShoot() >= getThrowSpeed())
+			{
+				shootProjectile(towerDegree);
+				getProjectiles()[getProjectiles().size() - 1].setTexture(bubbleTexture);
+
+				setElapsedTimeShoot(sf::milliseconds(0));
+			}
+		}
+		else
+		{
+			setBloonInSight(-1);
+			bool bloonFound = false;
+			for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+			{
+				if (checkInRadius(bloons[i]->getPosition()))
+				{
+					bloonFound = true;
+					setBloonInSight(i);
+					findRotateDeg(bloons[i]->getPosition());
+				}
+			}
+		}
+	}
+
 private:
-	sf::Color sprite;
-	//Projectile projectile
-	double throwSpeed;
-	int throwAmount;
+
+	sf::Time throwSpeed;
+	sf::Time elapsedTimeShoot;
+	int pierce;
 	int bloonInSight;
+	bool shooting;
 	sf::CircleShape sightRadius;
+	vector<Bubble> projectiles;
+	sf::Sprite dFrog;
+	sf::Texture dFrogTexture;
 };

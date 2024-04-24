@@ -6,6 +6,7 @@
 #include <SFML/System.hpp>
 #include <vector>
 #include <string>
+#include <cmath>
 
 using std::cout;
 using std::cin;

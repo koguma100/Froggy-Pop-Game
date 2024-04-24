@@ -3,19 +3,44 @@
 class DartFrog : public Tower
 {
 public:
-
-	DartFrog(const sf::Color& color = sf::Color::Red, double throwSpeed = 1.0, int throwAmount = 1, double sightRadius = 30)
-		: Tower(color, throwSpeed, throwAmount, sightRadius)
+	DartFrog(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
+		float newSightRadius) : Tower(texture, newThrowSpeed, pierce, newSightRadius)
+	{
+		this->getdFrogSprite().setScale(.06, .06);
+	}
+	DartFrog() : Tower()
 	{
 
 	}
 
-	void shoot()
+	void shoot(vector<Balloon*>& bloons, sf::Texture& bubbleTexture, float& towerDegree)
 	{
-		Bubble* temp = new Bubble(getPosition());
-		bubbles.push_back(temp);
+		if (getBloonInSight() != -1 && bloons[getBloonInSight()]->getType() != 0
+			&& checkInRadius(bloons[getBloonInSight()]->getPosition()))
+		{
+			towerDegree = findRotateDeg(bloons[getBloonInSight()]->getPosition());
+
+			if (getElapsedTimeShoot() >= getThrowSpeed())
+			{
+				shootProjectile(towerDegree);
+				getProjectiles()[getProjectiles().size() - 1].setTexture(bubbleTexture);
+				setElapsedTimeShoot(sf::milliseconds(0));
+			}
+		}
+		else
+		{
+			setBloonInSight(-1);
+			bool bloonFound = false;
+			for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+			{
+				if (checkInRadius(bloons[i]->getPosition()))
+				{
+					bloonFound = true;
+					setBloonInSight(i);
+					findRotateDeg(bloons[i]->getPosition());
+				}
+			}
+		}
 	}
 
-private:
-	vector<Bubble*> bubbles;
 };
