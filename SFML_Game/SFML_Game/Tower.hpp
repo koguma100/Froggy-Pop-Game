@@ -170,10 +170,40 @@ public:
 		return false;
 	}
 
-	virtual void shootProjectile(float degrees) 
+	void shootProjectile(float degrees) 
 	{
 		Bubble temp = Bubble(sf::Vector2f(getPosition().x - 20, getPosition().y - 20), degrees);
 		projectiles.push_back(temp);
+	}
+
+	void shoot(vector<Balloon*>& bloons, sf::Texture& bubbleTexture, float& towerDegree)
+	{
+		if (getBloonInSight() != -1 && bloons[getBloonInSight()]->getType() != 0
+			&& checkInRadius(bloons[getBloonInSight()]->getPosition()))
+		{
+			towerDegree = findRotateDeg(bloons[getBloonInSight()]->getPosition());
+
+			if (getElapsedTimeShoot() >= getThrowSpeed())
+			{
+				shootProjectile(towerDegree);
+				getProjectiles()[getProjectiles().size() - 1].setTexture(bubbleTexture);
+				setElapsedTimeShoot(sf::milliseconds(0));
+			}
+		}
+		else
+		{
+			setBloonInSight(-1);
+			bool bloonFound = false;
+			for (int i = 0; i < bloons.size() && !bloonFound; ++i)
+			{
+				if (checkInRadius(bloons[i]->getPosition()))
+				{
+					bloonFound = true;
+					setBloonInSight(i);
+					findRotateDeg(bloons[i]->getPosition());
+				}
+			}
+		}
 	}
 
 private:

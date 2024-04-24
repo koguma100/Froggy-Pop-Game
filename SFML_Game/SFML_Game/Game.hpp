@@ -309,32 +309,7 @@ public:
 
 			for (int x = 0; x < frogs.size() - 4; ++x)
 			{
-				if (frogs[x + 4].getBloonInSight() != -1 && bloons[frogs[x + 4].getBloonInSight()]->getType() != 0
-					&& frogs[x + 4].checkInRadius(bloons[frogs[x + 4].getBloonInSight()]->getPosition()))
-				{
-					towerDegree = frogs[x + 4].findRotateDeg(bloons[frogs[x + 4].getBloonInSight()]->getPosition());
-
-					if (frogs[x + 4].getElapsedTimeShoot() >= frogs[x + 4].getThrowSpeed())
-					{
-						frogs[x + 4].shootProjectile(towerDegree);
-						frogs[x + 4].getProjectiles()[frogs[x + 4].getProjectiles().size() - 1].setTexture(bubbleTexture);
-						frogs[x + 4].setElapsedTimeShoot(sf::milliseconds(0));
-					}
-				}
-				else
-				{
-					frogs[x + 4].setBloonInSight(-1);
-					bool bloonFound = false;
-					for (int i = 0; i < bloons.size() && !bloonFound; ++i)
-					{
-						if (frogs[x + 4].checkInRadius(bloons[i]->getPosition()))
-						{
-							bloonFound = true;
-							frogs[x + 4].setBloonInSight(i);
-							frogs[x + 4].findRotateDeg(bloons[i]->getPosition());
-						}
-					}
-				}
+				frogs[x + 4].shoot(bloons, bubbleTexture, towerDegree);
 
 				for (int i = 0; i < frogs[x + 4].getProjectiles().size(); ++i)
 				{
