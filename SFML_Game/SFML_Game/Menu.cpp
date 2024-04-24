@@ -35,6 +35,11 @@ sf::Text& Menu::getMoneyeco()
 	return Moneyeco;
 }
 
+sf::Text& Menu::getTowerlogo()
+{
+	return Towerlogo;
+}
+
 void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco)
 {
 	window->draw(*this);
@@ -50,5 +55,7 @@ void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco)
 	Moneyeco.setString(std::to_string(casheco));
 
 	window->draw(Moneyeco);
+
+	window->draw(Towerlogo);
 
 }

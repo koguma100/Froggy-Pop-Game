@@ -41,6 +41,8 @@ public:
 
 	sf::Text& getMoneyeco();
 
+	sf::Text& getTowerlogo();
+
 	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco); 
 
  private:
@@ -57,5 +59,6 @@ public:
 	 sf::Font font;
 	 sf::Text livestext;
 	 sf::Text Moneyeco;
+	 sf::Text Towerlogo;
 
 };

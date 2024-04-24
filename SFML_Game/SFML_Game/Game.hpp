@@ -555,7 +555,7 @@ private:
 
 		sidemenu.getSprite().setPosition(Vector2f(15, 15));
 
-		sidemenu.getSprite().setScale(.5, .5);
+		sidemenu.getSprite().setScale(1, 1);
 
 		//Money Picutre
 
@@ -566,9 +566,9 @@ private:
 
 		sidemenu.getGold().setTexture(sidemenu.getCoins());
 
-		sidemenu.getGold().setPosition(Vector2f(105, 15));
+		sidemenu.getGold().setPosition(Vector2f(165, 15));
 
-		sidemenu.getGold().setScale(.5, .5);
+		sidemenu.getGold().setScale(1, 1);
 
 
 		//Lives Text
@@ -582,11 +582,11 @@ private:
 
 		sidemenu.getLivesText().setString("299");
 
-		sidemenu.getLivesText().setCharacterSize(24);
+		sidemenu.getLivesText().setCharacterSize(36);
 
 		sidemenu.getLivesText().setFillColor(sf::Color::White);
 
-		sidemenu.getLivesText().setPosition(Vector2f(55, 15));
+		sidemenu.getLivesText().setPosition(Vector2f(100, 25));
 
 		//Coin Text
 
@@ -594,11 +594,23 @@ private:
 
 		sidemenu.getMoneyeco().setString("499");
 
-		sidemenu.getMoneyeco().setCharacterSize(24);
+		sidemenu.getMoneyeco().setCharacterSize(36);
 
 		sidemenu.getMoneyeco().setFillColor(sf::Color::White);
 
-		sidemenu.getMoneyeco().setPosition(Vector2f(145, 15));
+		sidemenu.getMoneyeco().setPosition(Vector2f(260, 25));
+
+		//Tower Text
+
+		sidemenu.getTowerlogo().setFont(sidemenu.getFont());
+
+		sidemenu.getTowerlogo().setString("Towers");
+
+		sidemenu.getTowerlogo().setCharacterSize(64);
+
+		sidemenu.getTowerlogo().setFillColor(sf::Color::Magenta);
+
+		sidemenu.getTowerlogo().setPosition(Vector2f(1555, 15));
 
 	}
 
@@ -613,9 +625,9 @@ private:
 
 		dart.getSprite().setTexture(dartFrogTexture);
 
-		dart.getSprite().setPosition(Vector2f(810, 55));
+		dart.getSprite().setPosition(Vector2f(1520, 130));
 
-		dart.getSprite().setScale(1, 1);
+		dart.getSprite().setScale(2, 2);
 
 		//Ninja
 
@@ -626,11 +638,11 @@ private:
 
 		ninja.getSprite().setTexture(ninja.getTexture());
 
-		ninja.setPosition(Vector2f(830, 150));
+		ninja.setPosition(Vector2f(1535, 375));
 
-		ninja.getSprite().setPosition(Vector2f(820, 120));
+		ninja.getSprite().setPosition(Vector2f(1520, 350));
 
-		ninja.getSprite().setScale(1, 1);
+		ninja.getSprite().setScale(2, 2);
 
 		//Tack
 
@@ -641,11 +653,11 @@ private:
 
 		tack.getSprite().setTexture(tack.getTexture());
 
-		tack.setPosition(Vector2f(910, 80));
+		tack.setPosition(Vector2f(1680, 145));
 
-		tack.getSprite().setPosition(Vector2f(875, 55));
+		tack.getSprite().setPosition(Vector2f(1670, 130));
 
-		tack.getSprite().setScale(1, 1);
+		tack.getSprite().setScale(2, 2);
 
 		//Wizard
 
@@ -656,11 +668,11 @@ private:
 
 		wizard.getSprite().setTexture(wizard.getTexture());
 
-		wizard.setPosition(Vector2f(910, 150));
+		wizard.setPosition(Vector2f(1680, 375));
 
-		wizard.getSprite().setPosition(Vector2f(880, 120));
+		wizard.getSprite().setPosition(Vector2f(1655, 350));
 
-		wizard.getSprite().setScale(1, 1);
+		wizard.getSprite().setScale(2, 2);
 	}
 
 	void initBackground()
@@ -737,19 +749,19 @@ private:
 
 	void initTowers()
 	{
-		Tower dart = Tower(dartFrogTexture, sf::milliseconds(1000), 1, 100.f);
+		Tower dart = Tower(dartFrogTexture, sf::milliseconds(1000), 1, 150.f);
 		dart.getdFrogSprite().setPosition(Vector2f(1000, 1000));
 		frogs.push_back(dart);
 
-		Tower ninja = Tower(ninjaFrogTexture, sf::milliseconds(1000), 1, 100.f);
+		Tower ninja = Tower(ninjaFrogTexture, sf::milliseconds(1000), 1, 150.f);
 		ninja.getdFrogSprite().setPosition(Vector2f(1000, 1000));
 		frogs.push_back(ninja);
 
-		Tower tack = Tower(tackFrogTexture, sf::milliseconds(1000), 1, 100.f);
+		Tower tack = Tower(tackFrogTexture, sf::milliseconds(1000), 1, 150.f);
 		tack.getdFrogSprite().setPosition(Vector2f(1000, 1000));
 		frogs.push_back(tack);
 
-		Tower wizard = Tower(wizardFrogTexture, sf::milliseconds(1000), 1, 100.f);
+		Tower wizard = Tower(wizardFrogTexture, sf::milliseconds(1000), 1, 150.f);
 		wizard.getdFrogSprite().setPosition(Vector2f(1000, 1000));
 		frogs.push_back(wizard);
 	}
