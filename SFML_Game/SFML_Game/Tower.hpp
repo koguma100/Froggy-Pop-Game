@@ -12,13 +12,13 @@ enum control
 class Tower : public sf::RectangleShape
 {
 public:
-	Tower(const sf::Texture& texture, sf::Time newThrowSpeed, int newThrowAmount,
+	Tower(const sf::Texture& texture, sf::Time newThrowSpeed, int pierce,
 		float newSightRadius)
 	{
 		dFrogTexture = texture;
 		dFrog.setTexture(texture);
 		throwSpeed = newThrowSpeed;
-		throwAmount = newThrowAmount;
+		this->pierce = pierce;
 		shooting = false;
 		bloonInSight = -1;
 		elapsedTimeShoot = sf::milliseconds(0);
@@ -50,9 +50,9 @@ public:
 	{
 		return throwSpeed;
 	}
-	int getThrowAmount()
+	int getPierce()
 	{
-		return throwAmount;
+		return pierce;
 	}
 	int getBloonInSight()
 	{
@@ -94,9 +94,9 @@ public:
 	{
 		throwSpeed = newThrowSpeed;
 	}
-	void setThrowAmount(int newThrowAmount)
+	void setThrowAmount(int pierce)
 	{
-		throwAmount = newThrowAmount;
+		this->pierce = pierce;
 	}
 	void setBloonInSight(int bloonIndex)
 	{
@@ -170,7 +170,7 @@ public:
 		return false;
 	}
 
-	void shootProjectile(float degrees)
+	virtual void shootProjectile(float degrees) 
 	{
 		Bubble temp = Bubble(sf::Vector2f(getPosition().x - 20, getPosition().y - 20), degrees);
 		projectiles.push_back(temp);
@@ -180,7 +180,7 @@ private:
 
 	sf::Time throwSpeed;
 	sf::Time elapsedTimeShoot;
-	int throwAmount;
+	int pierce;
 	int bloonInSight;
 	bool shooting;
 	sf::CircleShape sightRadius;

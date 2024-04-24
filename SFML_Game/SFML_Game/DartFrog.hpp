@@ -2,20 +2,15 @@
 
 class DartFrog : public Tower
 {
-public:
+	DartFrog(const sf::Texture& texture, sf::Time newThrowSpeed, int newThrowAmount,
+		float newSightRadius) : Tower(texture, newThrowSpeed, newThrowAmount, newSightRadius)
+	{
+		
+	}
 
-	DartFrog(const sf::Color& color = sf::Color::Red, double throwSpeed = 1.0, int throwAmount = 1, double sightRadius = 30)
-		: Tower(color, throwSpeed, throwAmount, sightRadius)
+	virtual void shootProjectile(float degrees)
 	{
 
 	}
 
-	void shoot()
-	{
-		Bubble* temp = new Bubble(getPosition());
-		bubbles.push_back(temp);
-	}
-
-private:
-	vector<Bubble*> bubbles;
 };

@@ -215,7 +215,6 @@ public:
 		case 2:
 			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
 			{
-				cout << "butt" << endl;
 				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
@@ -245,7 +244,6 @@ public:
 		case 3:
 			if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
 			{
-				cout << "butt" << endl;
 				spawnBalloon(2, bloons);
 				elapsed_time_bloons = sf::milliseconds(0);
 			}
@@ -342,7 +340,7 @@ public:
 				{
 					for (int bloonIndex = 0; bloonIndex < bloons.size(); ++bloonIndex)
 					{
-						if (frogs[x + 4].getProjectiles()[i].getBloonsPopped().size() > 0)	// change for penetration difference
+						if (frogs[x + 4].getProjectiles()[i].getBloonsPopped().size() >= frogs[x + 4].getPierce())	// change for penetration difference
 						{
 							frogs[x + 4].getProjectiles()[i].setActive(false);
 						}

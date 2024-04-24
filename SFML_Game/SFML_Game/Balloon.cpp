@@ -80,8 +80,6 @@ void Balloon::bloonPop()
     {
         *this = Balloon(type - 1, 20, getPosition());
         this->direct = temp;
-
-        cout << "Bloon popped!" << endl;
     }
 }
 
