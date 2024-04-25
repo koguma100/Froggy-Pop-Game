@@ -203,7 +203,7 @@ public:
 
 	void shootProjectile(float degrees) 
 	{
-		Bubble temp = Bubble(sf::Vector2f(getPosition().x - 20, getPosition().y - 20), degrees);
+		Bubble temp = Bubble(sf::Vector2f(getPosition().x , getPosition().y ), degrees);
 		projectiles.push_back(temp);
 	}
 

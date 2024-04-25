@@ -62,7 +62,17 @@ public:
 
 	sf::Text& getWizardCost();
 
+	sf::Text& getNextRoundText()
+	{
+		return NextRoundText;
+	}
+
 	void drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco, int& RdCount);
+
+	void drawNRB(sf::RenderWindow*& window)
+	{
+		window->draw(NextRoundText);
+	}
 
 private:
 
@@ -89,4 +99,5 @@ private:
 	sf::Text NinjaCost;
 	sf::Text TackCost;
 	sf::Text WizardCost;
+	sf::Text NextRoundText;
 };

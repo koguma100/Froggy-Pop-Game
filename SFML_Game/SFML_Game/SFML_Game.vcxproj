@@ -153,6 +153,7 @@
     <ClInclude Include="DartFrog.hpp" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="Menu.hpp" />
+    <ClInclude Include="NextRoundButton.hpp" />
     <ClInclude Include="Ninja.hpp" />
     <ClInclude Include="TackFrog.hpp" />
     <ClInclude Include="Tower.hpp" />
