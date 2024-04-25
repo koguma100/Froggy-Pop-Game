@@ -131,4 +131,6 @@ void Menu::drawmenu(sf::RenderWindow*& window, int& livesint, int& casheco, int&
 
 	window->draw(WizardCost);
 
+	window->draw(NextRoundText);
+
 }

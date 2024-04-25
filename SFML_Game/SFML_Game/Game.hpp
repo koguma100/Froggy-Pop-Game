@@ -91,7 +91,7 @@ public:
 						if (eco >= ninjaCost)
 						{
 							eco -= ninjaCost;
-							NinjaFrog* temp = new NinjaFrog(ninjaFrogTexture, sf::milliseconds(1500), 1, 200.f);
+							NinjaFrog* temp = new NinjaFrog(ninjaFrogTexture, sf::milliseconds(1200), 1, 200.f);
 							temp->moveTower(*window, ON);
 							frogs.push_back(temp);
 							control = OFF;
@@ -111,7 +111,7 @@ public:
 						if (eco >= wizardCost)
 						{
 							eco -= wizardCost;
-							WizardFrog* temp = new WizardFrog(wizardFrogTexture, sf::milliseconds(1000), 1000, 200.f);
+							WizardFrog* temp = new WizardFrog(wizardFrogTexture, sf::milliseconds(1800), 1000, 200.f);
 							temp->moveTower(*window, ON);
 							frogs.push_back(temp);
 							control = OFF;
@@ -180,6 +180,11 @@ public:
 					}
 				}
 
+				if (nrButton.isMouseOver(*window) && ev.mouseButton.button == sf::Mouse::Left && roundOver == OFF)
+				{
+					roundOver = ON;
+				}
+
 				break;
 			}
 		}
@@ -200,108 +205,273 @@ public:
 
 		//+++++++++++++++++++++++++++++++++START OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 
-		switch (round)	// round system
+		if (roundOver == ON)
 		{
-		case 1:
-			// 15 red spaced ruch
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+			switch (round)	// round system
 			{
-				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+			case 1:
+				// 15 red spaced ruch
+				if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(1, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 100;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 2:
+				if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				// 15 red bloon group rush
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
-			{
-				emptyBloons(bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 300;
-				round++;
-				cout << "Round: " << round << endl;
-			}
-			break;
-		case 2:
-			if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 110;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 3:
+				if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				// 15 red bloon group rush
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(3, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+				if ((bloons.size() >= 45 && bloons.size() < 60) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
-			{
-				emptyBloons(bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 400;
-				round++;
-				cout << "Round: " << round << endl;
-			}
-			break;
-		case 3:
-			if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(2, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 120;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 4:
+				if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			// 15 red bloon group rush
-			if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
-			{
-				spawnBalloon(3, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				if ((bloons.size() >= 15 && bloons.size() < 18) && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(2, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			if ((bloons.size() >= 30 && bloons.size() < 45) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(4, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
-			if ((bloons.size() >= 45 && bloons.size() < 60) && elapsed_time_bloons >= normal_rush_time)
-			{
-				spawnBalloon(3, bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-			}
+				if ((bloons.size() >= 18 && bloons.size() < 33) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
 
-			if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
-			{
-				emptyBloons(bloons);
-				elapsed_time_bloons = sf::milliseconds(0);
-				eco += 400;
-				round++;
-				cout << "Round: " << round << endl;
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 5:
+				if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(2, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 6:
+				if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(1, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(2, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 7:
+				if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(2, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(2, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 8:
+				if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(2, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(3, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 30 && bloons.size() < 36) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(4, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 9:
+				if (bloons.size() < 15 && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(3, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(3, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
+			case 10:
+				if (bloons.size() < 15 && elapsed_time_bloons >= normal_rush_time)
+				{
+					spawnBalloon(4, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+				if ((bloons.size() >= 15 && bloons.size() < 30) && elapsed_time_bloons >= grouped_rush_time)
+				{
+					spawnBalloon(3, bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+				}
+
+
+				if (roundEnded(bloons) && elapsed_time_bloons > sf::milliseconds(5000))
+				{
+					emptyBloons(bloons);
+					elapsed_time_bloons = sf::milliseconds(0);
+					eco += 150;
+					round++;
+					cout << "Round: " << round << endl;
+					roundOver = OFF;
+				}
+				break;
 			}
-			break;
 		}
 
 		//+++++++++++++++++++++++++++++++++END OF BLOON RUSH CODE+++++++++++++++++++++++++++++++++//
 		
 		// frog updates
 		// track mouse
-		if (!roundEnded(bloons))
+		if (!roundEnded(bloons) || roundOver == OFF)
 		{
 			balloonMovement();
 
@@ -401,6 +571,7 @@ public:
 		window->draw(background);
 
 		// draw menu
+
 		sidemenu.drawmenu(window, lives, eco, round);
 
 		dart.drawbutton(window);
@@ -410,6 +581,10 @@ public:
 		tack.drawbutton(window);
 
 		wizard.drawbutton(window);
+
+		nrButton.drawbutton(window);
+		sidemenu.drawNRB(window);
+
 
 		// draw balloons
 		for (int i = 0; i < checkpoints.size(); ++i)
@@ -429,22 +604,18 @@ public:
 			switch (towerSelected)
 			{
 			case DART:
-				window->draw(dartFrog);
 				window->draw(dartFrog.getSightRadius());
 				window->draw(dartFrog.getdFrogSprite());
 				break;
 			case NINJA:
-				window->draw(ninjaFrog);
 				window->draw(ninjaFrog.getSightRadius());
 				window->draw(ninjaFrog.getdFrogSprite());
 				break;
 			case TACK:
-				window->draw(tackFrog);
 				window->draw(tackFrog.getSightRadius());
 				window->draw(tackFrog.getdFrogSprite());
 				break;
 			case WIZARD:
-				window->draw(wizardFrog);
 				window->draw(wizardFrog.getSightRadius());
 				window->draw(wizardFrog.getdFrogSprite());
 				break;
@@ -465,7 +636,6 @@ public:
 					window->draw(frogs[x + 4]->getProjectiles()[i]);
 				}
 			}
-			window->draw(*frogs[x + 4]);	
 			window->draw(frogs[x + 4]->getdFrogSprite());
 		}
 
@@ -483,7 +653,7 @@ public:
 
 private:
 	// Variables
-	int lives, eco, numOfBloons, round;
+	int lives, eco, numOfBloons, round, roundOver = OFF;
 
 	// Window
 	sf::RenderWindow* window;
@@ -518,10 +688,10 @@ private:
 	sf::Texture ninjaFrogTexture;
 	sf::Texture tackFrogTexture;
 	sf::Texture wizardFrogTexture;
-	int dartCost = 200,
-		ninjaCost = 350,
-		tackCost = 250,
-		wizardCost = 450,
+	int dartCost = 150,
+		ninjaCost = 400,
+		tackCost = 500,
+		wizardCost = 1000,
 	    currentTower = -1;
 
 	towertype towerSelected;
@@ -534,6 +704,8 @@ private:
 	Button ninja;
 	Button tack;
 	Button wizard;
+	
+	NextRoundButton nrButton;
 
 	// Map
 	sf::Texture backgroundTexture;
@@ -670,7 +842,7 @@ private:
 
 		sidemenu.getDartCost().setFont(sidemenu.getFont());
 
-		sidemenu.getDartCost().setString("200");
+		sidemenu.getDartCost().setString("150");
 
 		sidemenu.getDartCost().setCharacterSize(24);
 
@@ -694,7 +866,7 @@ private:
 
 		sidemenu.getNinjaCost().setFont(sidemenu.getFont());
 
-		sidemenu.getNinjaCost().setString("350");
+		sidemenu.getNinjaCost().setString("400");
 
 		sidemenu.getNinjaCost().setCharacterSize(24);
 
@@ -718,7 +890,7 @@ private:
 
 		sidemenu.getTackCost().setFont(sidemenu.getFont());
 
-		sidemenu.getTackCost().setString("250");
+		sidemenu.getTackCost().setString("500");
 
 		sidemenu.getTackCost().setCharacterSize(24);
 
@@ -742,13 +914,21 @@ private:
 
 		sidemenu.getWizardCost().setFont(sidemenu.getFont());
 
-		sidemenu.getWizardCost().setString("450");
+		sidemenu.getWizardCost().setString("1000");
 
 		sidemenu.getWizardCost().setCharacterSize(24);
 
 		sidemenu.getWizardCost().setFillColor(sf::Color::Green);
 
-		sidemenu.getWizardCost().setPosition(Vector2f(1710, 530));
+		sidemenu.getWizardCost().setPosition(Vector2f(1704, 530));
+
+		// Next Round Button
+
+		sidemenu.getNextRoundText().setFont(sidemenu.getFont());
+		sidemenu.getNextRoundText().setString("  Next\n Round");
+		sidemenu.getNextRoundText().setCharacterSize(40);
+		sidemenu.getNextRoundText().setFillColor(sf::Color::Black);
+		sidemenu.getNextRoundText().setPosition(1595, 680);
 	}
 
 
